@@ -1,0 +1,15 @@
+.input {
+  /*padding: 0;
+  align-self: center;
+  width: 90%;*/
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+  border-radius: 15px;
+  margin: 10px;
+}
+
+input::-webkit-input-placeholder {
+  color: black;
+}

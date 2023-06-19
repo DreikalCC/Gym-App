@@ -1,0 +1,12 @@
+.element__group {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  align-items: center;
+  color: black;
+  height: fit-content;
+  max-width: 100%;
+  row-gap: 15px;
+  border: 1px solid black;
+  border-radius: 15px;
+  margin: 10px;
+}

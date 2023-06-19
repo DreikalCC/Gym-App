@@ -1,0 +1,10 @@
+.element__group_user {
+  border: none;
+}
+@media (max-width: 500px) {
+  .element__group_user {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 10px;
+  }
+}
