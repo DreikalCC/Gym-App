@@ -49,6 +49,16 @@ export function Credentials({
             className='input__form input__form_credentials'
             onChange={handlePasswordChange}
           />
+          <div className='input__radio'>
+            <input 
+              type='radio'
+              value='trainee'
+            />
+            <input 
+              type='radio'
+              value='trainer'
+            />
+          </div>
           <button
             type='submit'
             className='edit__submit-btn edit__submit-btn_log'

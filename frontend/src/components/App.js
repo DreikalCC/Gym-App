@@ -1,23 +1,23 @@
-import React from "react";
-import { useCallback } from "react";
-import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
-import { Header } from "./Header";
-import { Footer } from "./Footer";
-import { Exercises } from "./Exercises";
-import { TrainerUsers } from "./TrainerUsers";
-import { ImagePopup } from "./ImagePopup";
-import api from "../utils/api";
-import * as auth from "../utils/auth";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import { EditProfilePopup } from "./EditProfilePopup";
-import { EditAvatarPopup } from "./EditAvatarPopup";
-import { AddPlacePopup } from "./AddPlacePopup";
-import { DeleteCardPopup } from "./DeleteCardPopup";
-import { ProtectedRoute } from "./ProtectedRoute";
-import { Login } from "./Login";
-import { Register } from "./Register";
-import { InfoTooltip } from "./InfoTooltip";
-import { Trainers } from "./Trainers";
+import React from 'react';
+import { useCallback } from 'react';
+import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
+import { Header } from './Header';
+import { Footer } from './Footer';
+import { Exercises } from './Exercises';
+import { TrainerUsers } from './TrainerUsers';
+import { ImagePopup } from './ImagePopup';
+import api from '../utils/api';
+import * as auth from '../utils/auth';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { EditProfilePopup } from './EditProfilePopup';
+import { EditAvatarPopup } from './EditAvatarPopup';
+import { AddPlacePopup } from './AddPlacePopup';
+import { DeleteCardPopup } from './DeleteCardPopup';
+import { ProtectedRoute } from './ProtectedRoute';
+import { Login } from './Login';
+import { Register } from './Register';
+import { InfoTooltip } from './InfoTooltip';
+import { Trainers } from './Trainers';
 
 export default function App() {
   const navigate = useNavigate();
@@ -31,111 +31,113 @@ export default function App() {
   const [isTooltipOpen, setIsTooltipOpen] = React.useState(false);
   const [isMenuOn, setIsMenuOn] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({
-    name: "",
-    description: "",
+    name: '',
+    description: '',
   });
+  const [isTrainer, setIsTrainer] = React.useState(false);
+  const [isTrainee, setIsTrainee] = React.useState(false);
   //const [exercises, setExercises] = React.useState([]);
   const [exercises, setExercises] = React.useState([
     {
-      name: "excercise 1",
-      description: "3x12 bench press",
-      likes: ["002", "003"],
-      owner: "001",
-      _id: "007",
+      name: 'excercise 1',
+      description: '3x12 bench press',
+      likes: ['002', '003'],
+      owner: '001',
+      _id: '007',
     },
     {
-      name: "excercise2",
-      description: "5 x 12 back press",
-      likes: ["002"],
-      owner: "001",
-      _id: "006",
+      name: 'excercise2',
+      description: '5 x 12 back press',
+      likes: ['002'],
+      owner: '001',
+      _id: '006',
     },
   ]);
   const [userList, setUserList] = React.useState([
     {
-      name: "user 1",
-      owner: "001",
-      _id: "007",
+      name: 'user 1',
+      owner: '001',
+      _id: '007',
       exercises: [
         {
-          name: "exercise 1",
-          description: "3x12 bench press",
-          _id: "0000001",
+          name: 'exercise 1',
+          description: '3x12 bench press',
+          _id: '0000001',
         },
         {
-          name: "exercise 2",
-          description: "3x12 back press",
+          name: 'exercise 2',
+          description: '3x12 back press',
         },
       ],
-      trainer: "001",
+      trainer: '001',
     },
     {
-      name: "user 2",
-      owner: "002",
-      _id: "006",
+      name: 'user 2',
+      owner: '002',
+      _id: '006',
       exercises: [],
-      trainer: "001",
+      trainer: '001',
     },
   ]);
 
   const [trainerList, setTrainerList] = React.useState([
     {
-      name: "Trainer 1",
-      _id: "001",
+      name: 'Trainer 1',
+      _id: '001',
       trainees: [
         {
-          name: "user 1",
-          _id: "007",
+          name: 'user 1',
+          _id: '007',
         },
         {
-          name: "user 2",
-          _id: "006",
+          name: 'user 2',
+          _id: '006',
         },
       ],
     },
     {
-      name: "Trainer 2",
-      _id: "002",
+      name: 'Trainer 2',
+      _id: '002',
       trainees: [],
     },
   ]);
 
   const [currentUser, setCurrentUser] = React.useState({
-    name: "user 1",
-    owner: "001",
-    _id: "007",
+    name: 'user 1',
+    owner: '001',
+    _id: '007',
     exercises: [
       {
-        name: "exercise 1",
-        description: "3x12 bench press",
-        _id: "0000001",
+        name: 'exercise 1',
+        description: '3x12 bench press',
+        _id: '0000001',
       },
       {
-        name: "exercise 2",
-        description: "3x12 back press",
-        _id: "0000002",
+        name: 'exercise 2',
+        description: '3x12 back press',
+        _id: '0000002',
       },
     ],
-    trainer: "trainer 1",
+    trainer: 'trainer 1',
   });
-  const [deletableCard, setDeletableCard] = React.useState("");
-  const [location, setLocation] = React.useState("");
-  const [link, setLink] = React.useState("");
-  const [userRole, setUserRole] = React.useState("");
+  const [deletableCard, setDeletableCard] = React.useState('');
+  const [location, setLocation] = React.useState('');
+  const [link, setLink] = React.useState('');
+  const [userRole, setUserRole] = React.useState('');
   //const [userName, setUserName] = React.useState('');
   //const [lastname, setLastname] = React.useState('');
-  const [name, setName] = React.useState("");
-  const [description, setDescription] = React.useState("");
+  const [name, setName] = React.useState('');
+  const [description, setDescription] = React.useState('');
   const [loggedIn, setLoggedIn] = React.useState(true);
-  const [email, setEmail] = React.useState("");
+  const [email, setEmail] = React.useState('');
   const [success, setSuccess] = React.useState(false);
-  const [token, setToken] = React.useState(localStorage.getItem("jwt"));
+  const [token, setToken] = React.useState(localStorage.getItem('jwt'));
   const handleTokenCheckMemo = useCallback((token) => {
     if (!token) return;
     auth.checkToken(token).then((res) => {
       if (res.status === true) {
         setLoggedIn(true);
-        navigate("/main");
+        navigate('/main');
       }
     });
   }, []);
@@ -150,6 +152,7 @@ export default function App() {
       Promise.all([api.getUserInfo(token), api.getInitialCards(token)])
         .then(([user, serverCards]) => {
           setCurrentUser(user.data);
+          userRole(user.data);
           setEmail(user.data.email);
           setExercises(serverCards.data);
         })
@@ -167,6 +170,7 @@ export default function App() {
       });
     });
   }*/
+
   function handleExerciseCompletion(exercise) {
     const isCompleted = exercise.likes.some((i) => i === currentUser._id);
     api
@@ -221,7 +225,7 @@ export default function App() {
     setIsImagePopupOpen(false);
     setIsTooltipOpen(false);
     setIsMenuOn(false);
-    setSelectedCard({ name: "", link: "" });
+    setSelectedCard({ name: '', link: '' });
   }
   ////updaters
   function handleUpdateUser({ name, about }) {
@@ -258,7 +262,7 @@ export default function App() {
         setCurrentUser(data.user.name);
         setLoggedIn(true);
         setEmail(data.user.email);
-        navigate("/main");
+        navigate('/main');
         userPromise();
       })
       .catch((err) => {
@@ -267,15 +271,15 @@ export default function App() {
   }
   function handleLogout() {
     setLoggedIn(false);
-    localStorage.removeItem("jwt");
-    setEmail("");
-    navigate("/login");
+    localStorage.removeItem('jwt');
+    setEmail('');
+    navigate('/login');
   }
   function handleSignupSubmit({ name, lastname, email, password }) {
     auth
       .register(name, lastname, email, password)
       .then((res) => {
-        navigate("/login");
+        navigate('/login');
       })
       .then(() => {
         setSuccess(true);
@@ -286,6 +290,14 @@ export default function App() {
         setIsTooltipOpen(true);
         console.log(err);
       });
+  }
+  function userRole(user) {
+    if (user.role === trainee) {
+      setIsTrainee(true);
+    }
+    if (user.role === trainer) {
+      setIsTrainer(true);
+    }
   }
 
   ////events handlers
@@ -304,7 +316,7 @@ export default function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <div className="page">
+      <div className='page'>
         <Header
           isOpen={isMenuOn}
           onClose={closeAllPopups}
@@ -315,10 +327,10 @@ export default function App() {
         />
         <Routes>
           <Route
-            path="/trainers"
+            path='/trainers'
             element={
               <ProtectedRoute
-                loggedIn={loggedIn}
+                loggedIn={isTrainee}
                 element={
                   <Trainers
                     trainerList={trainerList}
@@ -334,10 +346,10 @@ export default function App() {
             }
           />
           <Route
-            path="/exercises"
+            path='/exercises'
             element={
               <ProtectedRoute
-                loggedIn={loggedIn}
+                loggedIn={isTrainee}
                 element={
                   <Exercises
                     exercises={exercises}
@@ -353,10 +365,10 @@ export default function App() {
             }
           />
           <Route
-            path="/users"
+            path='/users'
             element={
               <ProtectedRoute
-                loggedIn={loggedIn}
+                loggedIn={isTrainer}
                 element={
                   <TrainerUsers
                     userList={userList}
@@ -372,18 +384,18 @@ export default function App() {
             }
           />
           <Route
-            path="/login"
+            path='/login'
             element={<Login onLoginSubmit={handleLoginSubmit} />}
           />
 
           <Route
-            path="/signup"
+            path='/signup'
             element={<Register onSignupSubmit={handleSignupSubmit} />}
           />
           <Route
-            path="/"
+            path='/'
             element={
-              loggedIn ? <Navigate to="/exercises" /> : <Navigate to="/login" />
+              loggedIn ? <Navigate to='/exercises' /> : <Navigate to='/login' />
             }
           />
         </Routes>
