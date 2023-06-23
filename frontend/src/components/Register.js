@@ -9,6 +9,7 @@ export function Register(props) {
       lastname: e.target.lastname.value,
       email: e.target.email.value,
       password: e.target.password.value,
+      role: e.target.role.value,
     });
   }
   return (

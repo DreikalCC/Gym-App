@@ -36,6 +36,7 @@ export default function App() {
   });
   const [isTrainer, setIsTrainer] = React.useState(false);
   const [isTrainee, setIsTrainee] = React.useState(false);
+  const [hasTrainer, setHasTrainer] = React.useState('');
   //const [exercises, setExercises] = React.useState([]);
   const [exercises, setExercises] = React.useState([
     {
@@ -152,7 +153,7 @@ export default function App() {
       Promise.all([api.getUserInfo(token), api.getInitialCards(token)])
         .then(([user, serverCards]) => {
           setCurrentUser(user.data);
-          userRole(user.data);
+          getUserRole(user.data);
           setEmail(user.data.email);
           setExercises(serverCards.data);
         })
@@ -262,7 +263,12 @@ export default function App() {
         setCurrentUser(data.user.name);
         setLoggedIn(true);
         setEmail(data.user.email);
-        navigate('/main');
+        if (userRole === trainee) {
+          navigate('/');
+        }
+        if (userRole === trainer) {
+          navigate('/users');
+        }
         userPromise();
       })
       .catch((err) => {
@@ -275,7 +281,7 @@ export default function App() {
     setEmail('');
     navigate('/login');
   }
-  function handleSignupSubmit({ name, lastname, email, password }) {
+  function handleSignupSubmit({ name, lastname, email, password, role }) {
     auth
       .register(name, lastname, email, password)
       .then((res) => {
@@ -291,9 +297,13 @@ export default function App() {
         console.log(err);
       });
   }
-  function userRole(user) {
+  function getUserRole(user) {
     if (user.role === trainee) {
       setIsTrainee(true);
+      if(!user.trainer){
+        setHasTrainer(false);
+      }
+      setHasTrainer(true);
     }
     if (user.role === trainer) {
       setIsTrainer(true);
@@ -330,7 +340,7 @@ export default function App() {
             path='/trainers'
             element={
               <ProtectedRoute
-                loggedIn={isTrainee}
+                loggedIn={isTrainee&&!hasTrainer}
                 element={
                   <Trainers
                     trainerList={trainerList}
@@ -349,7 +359,7 @@ export default function App() {
             path='/exercises'
             element={
               <ProtectedRoute
-                loggedIn={isTrainee}
+                loggedIn={isTrainee&&hasTrainer}
                 element={
                   <Exercises
                     exercises={exercises}
@@ -368,7 +378,7 @@ export default function App() {
             path='/users'
             element={
               <ProtectedRoute
-                loggedIn={isTrainer}
+                loggedIn={loggedIn&&isTrainer}
                 element={
                   <TrainerUsers
                     userList={userList}

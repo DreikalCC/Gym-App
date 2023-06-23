@@ -12,6 +12,7 @@ export function Credentials({
   handleLastnameChange,
   onSubmit,
 }) {
+  const [radioState,setRadioState] = React.useState(false);
   return (
     <>
       <form className='credentials__form' to='/main' onSubmit={onSubmit}>
@@ -50,13 +51,18 @@ export function Credentials({
             onChange={handlePasswordChange}
           />
           <div className='input__radio'>
-            <input 
-              type='radio'
-              value='trainee'
-            />
-            <input 
-              type='radio'
-              value='trainer'
+            <input name='role' type="radio" id='trainee' value="trainee" checked={true} onClick={()=>{setRadioState=false}}/>
+            <label for="trainee">Usuario</label>
+            <input name='role' type="radio" id='trainer' value="trainer" onClick={()=>{setRadioState=true}}/>
+            <label for='trainer' >Entrenador:</label>
+            <input
+              required
+              disabled={!radioState}
+              name='auth'
+              type='text'
+              placeholder='Codigo de verificación'
+              className='input__form input__form_credentials'
+              onChange={handleTrainerChange}
             />
           </div>
           <button
