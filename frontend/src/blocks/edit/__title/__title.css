@@ -4,11 +4,12 @@
   font-weight: 900;
   line-height: 1.8rem;
   margin: 0;
+  text-align: center;
 }
 
-@media screen and (max-width:585px){
+@media screen and (max-width: 585px) {
   .edit__title {
     font-size: 1.1rem;
-    padding: 25px 22px 76px;
+    padding: 25px;
   }
 }

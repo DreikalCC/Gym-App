@@ -10,7 +10,7 @@ export function Login(props) {
       email: e.target.email.value,
       password: e.target.password.value,
     });
-    navigate('/main');
+    navigate('/');
   }
   return (
     <section className='credentials'>

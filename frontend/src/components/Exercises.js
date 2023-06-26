@@ -1,28 +1,29 @@
-import React, { useContext } from "react";
-import { UserExerciseCard } from "./UserExerciseCard";
-import { Welcome } from "./Welcome";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import React, { useContext } from 'react';
+import { UserExerciseCard } from './UserExerciseCard';
+import { Welcome } from './Welcome';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export function Exercises(props) {
-  //console.log("props on main to card", props);
   const currentUserContext = useContext(CurrentUserContext);
+  console.log('exercises to user exe card', props.exercises);
+  console.log('currentUser on exercises to user exe card', currentUserContext);
   return (
     <>
-      <section className="profile">
-        <div className="profile__info">
-          <h1 className="profile__name">
-            Your trainer is: {currentUserContext.trainer}
+      <section className='profile'>
+        <div className='profile__info'>
+          <h1 className='profile__name'>
+            Your trainer is: {currentUserContext.trainer[0].name}
           </h1>
           <button
-            id="profile-btn"
+            id='profile-btn'
             onClick={props.handleEditProfileClick}
-            className="profile__info profile__edit-button"
+            className='profile__info profile__edit-button'
           ></button>
-          <p className="profile__description">{currentUserContext.about}</p>
+          <p className='profile__description'>{currentUserContext.about}</p>
         </div>
       </section>
 
-      <section className="elements">
+      <section className='elements'>
         {!props.exercises || !props.exercises.length ? (
           <Welcome />
         ) : (
@@ -31,8 +32,6 @@ export function Exercises(props) {
               <UserExerciseCard
                 key={exercise._id}
                 data={exercise}
-                onCardClick={props.handleCardClick}
-                onEraseClick={props.handleEraseCardClick}
                 handleExerciseCompletion={props.handleExerciseCompletion}
               />
             );

@@ -36,28 +36,12 @@ export default function App() {
   });
   const [isTrainer, setIsTrainer] = React.useState(false);
   const [isTrainee, setIsTrainee] = React.useState(false);
-  const [hasTrainer, setHasTrainer] = React.useState('');
+  const [hasTrainer, setHasTrainer] = React.useState(false);
   //const [exercises, setExercises] = React.useState([]);
-  const [exercises, setExercises] = React.useState([
-    {
-      name: 'excercise 1',
-      description: '3x12 bench press',
-      likes: ['002', '003'],
-      owner: '001',
-      _id: '007',
-    },
-    {
-      name: 'excercise2',
-      description: '5 x 12 back press',
-      likes: ['002'],
-      owner: '001',
-      _id: '006',
-    },
-  ]);
+  const [exercises, setExercises] = React.useState([]);
   const [userList, setUserList] = React.useState([
     {
       name: 'user 1',
-      owner: '001',
       _id: '007',
       exercises: [
         {
@@ -68,23 +52,44 @@ export default function App() {
         {
           name: 'exercise 2',
           description: '3x12 back press',
+          _id: '0000002',
         },
       ],
-      trainer: '001',
+      trainer: [
+        {
+          name: 'Trainer 1',
+          _id: 'T001',
+        },
+      ],
     },
     {
       name: 'user 2',
-      owner: '002',
       _id: '006',
       exercises: [],
-      trainer: '001',
+      trainer: [
+        {
+          name: 'Trainer 2',
+          _id: 'T002',
+        },
+      ],
+    },
+    {
+      name: 'user 3',
+      _id: '005',
+      exercises: [],
+      trainer: [
+        {
+          name: 'Trainer 1',
+          _id: 'T001',
+        },
+      ],
     },
   ]);
 
   const [trainerList, setTrainerList] = React.useState([
     {
       name: 'Trainer 1',
-      _id: '001',
+      _id: 'T001',
       trainees: [
         {
           name: 'user 1',
@@ -98,29 +103,12 @@ export default function App() {
     },
     {
       name: 'Trainer 2',
-      _id: '002',
+      _id: 'T002',
       trainees: [],
     },
   ]);
 
-  const [currentUser, setCurrentUser] = React.useState({
-    name: 'user 1',
-    owner: '001',
-    _id: '007',
-    exercises: [
-      {
-        name: 'exercise 1',
-        description: '3x12 bench press',
-        _id: '0000001',
-      },
-      {
-        name: 'exercise 2',
-        description: '3x12 back press',
-        _id: '0000002',
-      },
-    ],
-    trainer: 'trainer 1',
-  });
+  const [currentUser, setCurrentUser] = React.useState({});
   const [deletableCard, setDeletableCard] = React.useState('');
   const [location, setLocation] = React.useState('');
   const [link, setLink] = React.useState('');
@@ -138,7 +126,7 @@ export default function App() {
     auth.checkToken(token).then((res) => {
       if (res.status === true) {
         setLoggedIn(true);
-        navigate('/main');
+        navigate('/');
       }
     });
   }, []);
@@ -172,20 +160,50 @@ export default function App() {
     });
   }*/
 
-  function handleExerciseCompletion(exercise) {
-    const isCompleted = exercise.likes.some((i) => i === currentUser._id);
-    api
-      .changeLikeExeStatus(exercise._id, isCompleted, token)
+  function handleTrainerSelect(trainer) {
+    trainer.trainees.push(currentUser);
+    setHasTrainer(true);
+    currentUser.trainer.push(trainer);
+    navigate('/exercises');
+    /*api
+      .changeTrainerSelectedStatus(currentUser._id, token)
+      .then(() => {
+        api.setSelectedTrainer(trainer._id, token);
+      })
+      .then(() => {
+        navigate('/exercises');
+      });*/
+  }
+
+  function handleExerciseCompletion(exercise, isCompleted) {
+    console.log(
+      'exercise received by app after clicked',
+      exercise,
+      currentUser._id
+    );
+    const userId = currentUser._id;
+
+    if (!isCompleted) {
+      exercise.completed.push(userId);
+    } else {
+      exercise.completed.pop(userId);
+    }
+    console.log('new exercise completed data', exercise.completed);
+    /*api
+      .changeExerciseStatus(exercise._id, isCompleted, token)
       .then((newExercises) => {
         setExercises((state) => {
           return state.map((c) =>
             c._id === exercise._id ? newExercises.data : c
           );
         });
-      });
+      });*/
   }
-  function handleCardDelete(exercise) {
-    api
+  function handleEraseExercise(exercise) {
+    console.log('exercise to be erased', exercise);
+    console.log('exercise list', exercises);
+
+    /*api
       .deleteCard(exercise._id, token)
       .then(
         setExercises((state) => {
@@ -195,23 +213,10 @@ export default function App() {
           return remainingExercises.map((c) => c);
         })
       )
-      .finally(closeAllPopups());
-  }
-  function handleCardClick(e) {
-    setSelectedCard({ name: e.target.alt, link: e.target.src });
-    setIsImagePopupOpen(true);
+      .finally(closeAllPopups());*/
   }
   ////edition functions
-  function handleEditAvatarClick() {
-    setIsEditAvatarPopupOpen(true);
-  }
-  function handleEditProfileClick() {
-    setIsEditProfilePopupOpen(true);
-  }
-  function handleAddPlaceClick() {
-    setIsAddPlacePopupOpen(true);
-  }
-  function handleEraseCardClick(card) {
+  function handleEraseExerciseClick(card) {
     setDeletableCard(card);
     setEraseCardPopupOpen(true);
   }
@@ -229,51 +234,95 @@ export default function App() {
     setSelectedCard({ name: '', link: '' });
   }
   ////updaters
-  function handleUpdateUser({ name, about }) {
-    api
-      .postUserInfo(name, about, token)
-      .then((res) => {
-        setCurrentUser(res.data);
-      })
-      .finally(closeAllPopups());
-  }
-  function handleUpdateAvatar({ avatar }) {
-    api
-      .postUserAvatar(avatar, token)
-      .then((res) => {
-        setCurrentUser(res.data);
-      })
-      .finally(closeAllPopups());
-  }
-  function handleAddExercise({ name, description }) {
-    api
-      .postCard(name, description, token)
-      .then((newExercise) => {
-        setExercises([newExercise.data, ...exercises]);
-      })
-      .finally(closeAllPopups());
+  function handleAddExercise({ name, description, user }) {
+    console.log('exercise to be added to the list', name, description);
+    console.log('user that will receive the exercise', user);
+    api.postCard(user, name, description, token).then((newExercise) => {
+      setExercises([newExercise.data, ...exercises]);
+    });
   }
   ////registry
   function handleLoginSubmit({ email, password }) {
-    auth
+    console.log('log in submitted', email, password);
+    setCurrentUser({
+      name: 'Trainer 1',
+      _id: 'T001',
+      /*exercises: [
+        {
+          name: 'exercise 1',
+          description: '3x12 bench press',
+          _id: '00001',
+          completed: [],
+        },
+        {
+          name: 'exercise 2',
+          description: '3x12 back press',
+          _id: '00002',
+          completed: ['007'],
+        },
+      ],*/
+      role: 'trainer',
+      /*trainer: [
+        {
+          name: 'Trainer 2',
+          _id: '002',
+          trainees: ['007'],
+        },
+      ],*/
+    });
+
+    console.log('user setted', currentUser);
+    setExercises(currentUser.exercises);
+
+    console.log('exercises setted', exercises);
+    getUserRole(currentUser.role);
+
+    console.log('role setted trainer,trainee', isTrainer, isTrainee);
+    setLoggedIn(true);
+
+    console.log('logged in setted', loggedIn);
+    setEmail(email);
+
+    console.log('mail setted', email);
+    routeLoggedUser();
+
+    console.log('routed user to correct link?');
+    /*auth
       .authorize(email, password)
       .then((data) => {
         setToken(data.token);
         setUserRole(data.user.role);
-        setCurrentUser(data.user.name);
+        setCurrentUser(data.user);
         setLoggedIn(true);
         setEmail(data.user.email);
-        if (userRole === trainee) {
-          navigate('/');
+        setUser
+        if (userRole === 'trainee') {
+          setIsTrainee(true);
+      navigate('/');
         }
-        if (userRole === trainer) {
-          navigate('/users');
+        if (userRole === 'trainer') {
+          setIsTrainer(true);
+      navigate('/users');
         }
         userPromise();
       })
       .catch((err) => {
         console.log(err);
-      });
+      });*/
+  }
+  function routeLoggedUser() {
+    console.log('routed executed, now redirecting');
+    if (userRole === 'trainee') {
+      console.log('knows is traineeeee');
+      checkForTrainer(currentUser.trainer);
+      setIsTrainee(true);
+      navigate('/trainers');
+    }
+    if (userRole === 'trainer') {
+      console.log('knows is trainerrr');
+      setIsTrainer(true);
+      navigate('/users');
+    }
   }
   function handleLogout() {
     setLoggedIn(false);
@@ -282,8 +331,16 @@ export default function App() {
     navigate('/login');
   }
   function handleSignupSubmit({ name, lastname, email, password, role }) {
+    console.log(
+      'data from registration',
+      name,
+      lastname,
+      email,
+      password,
+      role
+    );
     auth
-      .register(name, lastname, email, password)
+      .register(name, lastname, email, password, role)
       .then((res) => {
         navigate('/login');
       })
@@ -297,15 +354,20 @@ export default function App() {
         console.log(err);
       });
   }
-  function getUserRole(user) {
-    if (user.role === trainee) {
-      setIsTrainee(true);
-      if(!user.trainer){
-        setHasTrainer(false);
-      }
-      setHasTrainer(true);
+  function checkForTrainer(user) {
+    console.log('will check for trainer', user);
+    if (!user) {
+      setHasTrainer(false);
     }
-    if (user.role === trainer) {
+    setHasTrainer(true);
+  }
+
+  function getUserRole(user) {
+    console.log('will check for the role', user);
+    if (user === 'trainee') {
+      setIsTrainee(true);
+    }
+    if (user === 'trainer') {
       setIsTrainer(true);
     }
   }
@@ -322,6 +384,11 @@ export default function App() {
   }
   function handleDescriptionChange(e) {
     setDescription(e.target.value);
+  }
+  function temp(data) {
+    setExercises([data, ...exercises]);
+
+    console.log('loged exers', exercises);
   }
 
   return (
@@ -340,16 +407,11 @@ export default function App() {
             path='/trainers'
             element={
               <ProtectedRoute
-                loggedIn={isTrainee&&!hasTrainer}
+                loggedIn={isTrainee && !hasTrainer}
                 element={
                   <Trainers
                     trainerList={trainerList}
-                    handleExerciseCompletion={handleExerciseCompletion}
-                    handleCardClick={handleCardClick}
-                    handleEditAvatarClick={handleEditAvatarClick}
-                    handleEditProfileClick={handleEditProfileClick}
-                    handleAddPlaceClick={handleAddPlaceClick}
-                    handleEraseCardClick={handleEraseCardClick}
+                    trainerSelect={handleTrainerSelect}
                   />
                 }
               />
@@ -359,16 +421,11 @@ export default function App() {
             path='/exercises'
             element={
               <ProtectedRoute
-                loggedIn={isTrainee&&hasTrainer}
+                loggedIn={isTrainee && hasTrainer}
                 element={
                   <Exercises
                     exercises={exercises}
                     handleExerciseCompletion={handleExerciseCompletion}
-                    handleCardClick={handleCardClick}
-                    handleEditAvatarClick={handleEditAvatarClick}
-                    handleEditProfileClick={handleEditProfileClick}
-                    handleAddPlaceClick={handleAddPlaceClick}
-                    handleEraseCardClick={handleEraseCardClick}
                   />
                 }
               />
@@ -378,16 +435,13 @@ export default function App() {
             path='/users'
             element={
               <ProtectedRoute
-                loggedIn={loggedIn&&isTrainer}
+                loggedIn={loggedIn && isTrainer}
                 element={
                   <TrainerUsers
+                    temp={temp}
                     userList={userList}
                     handleAddExercise={handleAddExercise}
-                    handleCardClick={handleCardClick}
-                    handleEditAvatarClick={handleEditAvatarClick}
-                    handleEditProfileClick={handleEditProfileClick}
-                    handleAddPlaceClick={handleAddPlaceClick}
-                    handleEraseCardClick={handleEraseCardClick}
+                    handleEraseExerciseClick={handleEraseExerciseClick}
                   />
                 }
               />
@@ -405,7 +459,11 @@ export default function App() {
           <Route
             path='/'
             element={
-              loggedIn ? <Navigate to='/exercises' /> : <Navigate to='/login' />
+              loggedIn && isTrainer ? (
+                <Navigate to='/users' />
+              ) : (
+                <Navigate to='/trainers' />
+              )
             }
           />
         </Routes>
@@ -417,9 +475,9 @@ export default function App() {
         <DeleteCardPopup
           isOpen={isEraseCardPopupOpen}
           onClose={closeAllPopups}
-          onDeleteCard={handleCardDelete}
+          onDeleteCard={handleEraseExercise}
           card={deletableCard}
-          onConfirm={handleCardDelete}
+          onConfirm={handleEraseExercise}
         />
         <Footer />
       </div>

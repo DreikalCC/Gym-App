@@ -5,7 +5,6 @@ export function PopupWithForm({
   name,
   title,
   buttonText,
-  children,
 }) {
   return (
     <section
@@ -14,7 +13,6 @@ export function PopupWithForm({
     >
       <form name={name} onSubmit={onSubmit} className='edit__form'>
         <h3 className='edit__title'>{title}</h3>
-        <fieldset className='input'>{children}</fieldset>
         <button type='submit' className='edit__submit-btn'>
           {buttonText}
         </button>

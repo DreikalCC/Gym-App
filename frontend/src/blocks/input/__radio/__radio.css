@@ -1,0 +1,10 @@
+.input__radio {
+  display: flex;
+  justify-content: space-evenly;
+}
+@media (width<550px) {
+  .input__radio {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

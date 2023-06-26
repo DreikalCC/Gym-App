@@ -38,15 +38,20 @@
 @import url(./blocks/input/__description/__description.css);
 @import url(./blocks/input/__name/__name.css);
 @import url(./blocks/input/__form/__form.css);
-@import url(./blocks/input/__form/input__form_credentials.css);
+@import url(./blocks/input/__form/__form_disabled.css);
+@import url(./blocks/input/__form/__form_credentials.css);
 @import url(./blocks/input/__form/__form-error.css);
 @import url(./blocks/input/__form/__form_type-error.css);
 @import url(./blocks/input/__form/__form-error_active.css);
 @import url(./blocks/input/__field/__field.css);
+@import url(./blocks/input/__radio/__radio.css);
+@import url(./blocks/input/__radio/__radio_user.css);
+@import url(./blocks/input/__radio/__radio_trainer.css);
 
 @import url(./blocks/elements/elements.css);
 
 @import url(./blocks/element/element.css);
+@import url(./blocks/element/element_disabled.css);
 @import url(./blocks/element/element_completed.css);
 @import url(./blocks/element/__group/__group.css);
 @import url(./blocks/element/__group/__group_user.css);

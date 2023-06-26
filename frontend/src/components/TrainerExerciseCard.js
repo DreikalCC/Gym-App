@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import React, { useContext } from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export function TrainerExerciseCard(props) {
-  //console.log("props on exercise card", props);
+  props.temp(props.data);
+  console.log('props on exercise card', props);
   const currentUser = useContext(CurrentUserContext);
   /*const isOwn = props.data.owner[0] === currentUser._id;
   const cardDeleteButtonClassName = `${
@@ -17,13 +18,13 @@ export function TrainerExerciseCard(props) {
   */
 
   return (
-    <div className="element">
-      <div className="element__group">
-        <h3 className="element__location">{props.data.name}</h3>
-        <p className="element__description">{props.data.description}</p>
+    <div className='element'>
+      <div className='element__group'>
+        <h3 className='element__location'>{props.data.name}</h3>
+        <p className='element__description'>{props.data.description}</p>
         <button
-          id="erase-btn"
-          className="element__erase"
+          id='erase-btn'
+          className='element__erase'
           onClick={() => {
             props.onEraseClick(props.data);
           }}

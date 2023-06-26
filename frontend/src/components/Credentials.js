@@ -10,28 +10,33 @@ export function Credentials({
   handleEmailChange,
   handleUserNameChange,
   handleLastnameChange,
+  handleTrainerChange,
   onSubmit,
 }) {
-  const [radioState,setRadioState] = React.useState(false);
+  const [radioState, setRadioState] = React.useState(false);
+  const isFull = link === 'log in';
+  const fullClassName = `${
+    isFull ? 'input__form input__form_credentials' : 'input__form_disabled'
+  }`;
   return (
     <>
       <form className='credentials__form' to='/main' onSubmit={onSubmit}>
         <h3 className='credentials__title'>{title}</h3>
         <fieldset className='input'>
           <input
-            required
+            required={isFull}
             name='name'
             type='name'
             placeholder='Name'
-            className='input__form input__form_credentials'
+            className={fullClassName}
             onChange={handleUserNameChange}
           />
           <input
-            required
+            required={isFull}
             name='lastname'
             type='lastname'
             placeholder='Lastname'
-            className='input__form input__form_credentials'
+            className={fullClassName}
             onChange={handleLastnameChange}
           />
           <input
@@ -50,13 +55,34 @@ export function Credentials({
             className='input__form input__form_credentials'
             onChange={handlePasswordChange}
           />
-          <div className='input__radio'>
-            <input name='role' type="radio" id='trainee' value="trainee" checked={true} onClick={()=>{setRadioState=false}}/>
-            <label for="trainee">Usuario</label>
-            <input name='role' type="radio" id='trainer' value="trainer" onClick={()=>{setRadioState=true}}/>
-            <label for='trainer' >Entrenador:</label>
+          <div className={isFull ? 'input__radio' : 'input__form_disabled'}>
+            <label className='input__radio_user'>
+              <input
+                required={isFull}
+                name='role'
+                type='radio'
+                id='trainee'
+                value='trainee'
+                onClick={() => {
+                  setRadioState(false);
+                }}
+              />
+              &nbsp;Usuario
+            </label>
+            <label className='input__radio_user'>
+              <input
+                name='role'
+                type='radio'
+                id='trainer'
+                value='trainer'
+                onClick={() => {
+                  setRadioState(true);
+                }}
+              />
+              &nbsp;Entrenador:
+            </label>
             <input
-              required
+              required={isFull}
               disabled={!radioState}
               name='auth'
               type='text'
