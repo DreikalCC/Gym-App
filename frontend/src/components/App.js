@@ -245,9 +245,9 @@ export default function App() {
   function handleLoginSubmit({ email, password }) {
     console.log('log in submitted', email, password);
     setCurrentUser({
-      name: 'Trainer 1',
-      _id: 'T001',
-      /*exercises: [
+      name: 'user 1',
+      _id: '007',
+      exercises: [
         {
           name: 'exercise 1',
           description: '3x12 bench press',
@@ -260,15 +260,15 @@ export default function App() {
           _id: '00002',
           completed: ['007'],
         },
-      ],*/
-      role: 'trainer',
-      /*trainer: [
+      ],
+      role: 'trainee',
+      trainer: [
         {
           name: 'Trainer 2',
           _id: '002',
           trainees: ['007'],
         },
-      ],*/
+      ],
     });
 
     console.log('user setted', currentUser);
@@ -386,7 +386,7 @@ export default function App() {
     setDescription(e.target.value);
   }
   function temp(data) {
-    setExercises([data, ...exercises]);
+    //setExercises([data, ...exercises]);
 
     console.log('loged exers', exercises);
   }
