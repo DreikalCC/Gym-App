@@ -15,6 +15,11 @@ export function Register(props) {
   return (
     <section className='credentials'>
       <Credentials
+        handleNameChange={props.handleNameChange}
+        handleLastnameChange={props.handleLastnameChange}
+        handleEmailChange={props.handleEmailChange}
+        handleTrainerCodeChange={props.handleTrainerCodeChange}
+        handlePasswordChange={props.handlePasswordChange}
         title='Sign up'
         buttonText='Sign up'
         linkText='Already a member? Log in here!'

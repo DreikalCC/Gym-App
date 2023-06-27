@@ -10,7 +10,7 @@ export function Credentials({
   handleEmailChange,
   handleUserNameChange,
   handleLastnameChange,
-  handleTrainerChange,
+  handleTrainerCodeChange,
   onSubmit,
 }) {
   const [radioState, setRadioState] = React.useState(false);
@@ -88,7 +88,7 @@ export function Credentials({
               type='text'
               placeholder='Codigo de verificación'
               className='input__form input__form_credentials'
-              onChange={handleTrainerChange}
+              onChange={handleTrainerCodeChange}
             />
           </div>
           <button

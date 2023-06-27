@@ -5,13 +5,9 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import { Exercises } from './Exercises';
 import { TrainerUsers } from './TrainerUsers';
-import { ImagePopup } from './ImagePopup';
 import api from '../utils/api';
 import * as auth from '../utils/auth';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { EditProfilePopup } from './EditProfilePopup';
-import { EditAvatarPopup } from './EditAvatarPopup';
-import { AddPlacePopup } from './AddPlacePopup';
 import { DeleteCardPopup } from './DeleteCardPopup';
 import { ProtectedRoute } from './ProtectedRoute';
 import { Login } from './Login';
@@ -21,13 +17,8 @@ import { Trainers } from './Trainers';
 
 export default function App() {
   const navigate = useNavigate();
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    React.useState(false);
+  React.useState(false);
   const [isEraseCardPopupOpen, setEraseCardPopupOpen] = React.useState(false);
-  const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = React.useState(false);
   const [isMenuOn, setIsMenuOn] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({
@@ -110,18 +101,18 @@ export default function App() {
 
   const [currentUser, setCurrentUser] = React.useState({});
   const [deletableCard, setDeletableCard] = React.useState('');
-  const [location, setLocation] = React.useState('');
-  const [link, setLink] = React.useState('');
+  const [trainerCode, setTrainerCode] = React.useState('');
+  const [password, setPassword] = React.useState('');
   const [userRole, setUserRole] = React.useState('');
   //const [userName, setUserName] = React.useState('');
-  //const [lastname, setLastname] = React.useState('');
+  const [lastname, setLastname] = React.useState('');
   const [name, setName] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [loggedIn, setLoggedIn] = React.useState(true);
   const [email, setEmail] = React.useState('');
   const [success, setSuccess] = React.useState(false);
   const [token, setToken] = React.useState(localStorage.getItem('jwt'));
-  const handleTokenCheckMemo = useCallback((token) => {
+  /*const handleTokenCheckMemo = useCallback((token) => {
     if (!token) return;
     auth.checkToken(token).then((res) => {
       if (res.status === true) {
@@ -134,9 +125,9 @@ export default function App() {
     if (!token) return;
     handleTokenCheckMemo(token);
     userPromise(token);
-  }, [token]);
+  }, [token]);*/
 
-  function userPromise(token) {
+  /*function userPromise(token) {
     if (token) {
       Promise.all([api.getUserInfo(token), api.getInitialCards(token)])
         .then(([user, serverCards]) => {
@@ -149,7 +140,7 @@ export default function App() {
           console.log(err);
         });
     }
-  }
+  }*/
   ////card functions
   /*function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i === currentUser._id);
@@ -224,13 +215,8 @@ export default function App() {
     setIsMenuOn(true);
   }
   function closeAllPopups() {
-    setIsEditAvatarPopupOpen(false);
-    setIsEditProfilePopupOpen(false);
-    setIsAddPlacePopupOpen(false);
     setEraseCardPopupOpen(false);
-    setIsImagePopupOpen(false);
     setIsTooltipOpen(false);
-    setIsMenuOn(false);
     setSelectedCard({ name: '', link: '' });
   }
   ////updaters
@@ -373,11 +359,11 @@ export default function App() {
   }
 
   ////events handlers
-  function handleLocationChange(e) {
-    setLocation(e.target.value);
+  function handleExerciseChange(e) {
+    setExercise(e.target.value);
   }
-  function handleLinkChange(e) {
-    setLink(e.target.value);
+  function handleLastnameChange(e) {
+    setLastname(e.target.value);
   }
   function handleNameChange(e) {
     setName(e.target.value);
@@ -385,6 +371,16 @@ export default function App() {
   function handleDescriptionChange(e) {
     setDescription(e.target.value);
   }
+  function handleEmailChange(e) {
+    setEmail(e.target.value);
+  }
+  function handleTrainerCodeChange(e) {
+    setTrainerCode(e.target.value);
+  }
+  function handlePasswordChange(e) {
+    setPassword(e.target.value);
+  }
+
   function temp(data) {
     //setRoutine([data, ...routine]);
 
@@ -454,7 +450,16 @@ export default function App() {
 
           <Route
             path='/signup'
-            element={<Register onSignupSubmit={handleSignupSubmit} />}
+            element={
+              <Register
+                onNameChange={handleNameChange}
+                onLastnameChange={handleLastnameChange}
+                onEmailChange={handleEmailChange}
+                onTrainerCodeChange={handleTrainerCodeChange}
+                onPasswordChange={handlePasswordChange}
+                onSignupSubmit={handleSignupSubmit}
+              />
+            }
           />
           <Route
             path='/'
