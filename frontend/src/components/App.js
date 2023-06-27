@@ -37,8 +37,8 @@ export default function App() {
   const [isTrainer, setIsTrainer] = React.useState(false);
   const [isTrainee, setIsTrainee] = React.useState(false);
   const [hasTrainer, setHasTrainer] = React.useState(false);
-  //const [exercises, setExercises] = React.useState([]);
-  const [exercises, setExercises] = React.useState([]);
+  const [exercise, setExercise] = React.useState([]);
+  const [routine, setRoutine] = React.useState([]);
   const [userList, setUserList] = React.useState([
     {
       name: 'user 1',
@@ -143,7 +143,7 @@ export default function App() {
           setCurrentUser(user.data);
           getUserRole(user.data);
           setEmail(user.data.email);
-          setExercises(serverCards.data);
+          setRoutine(serverCards.data);
         })
         .catch((err) => {
           console.log(err);
@@ -192,7 +192,7 @@ export default function App() {
     /*api
       .changeExerciseStatus(exercise._id, isCompleted, token)
       .then((newExercises) => {
-        setExercises((state) => {
+        setRoutine((state) => {
           return state.map((c) =>
             c._id === exercise._id ? newExercises.data : c
           );
@@ -201,12 +201,12 @@ export default function App() {
   }
   function handleEraseExercise(exercise) {
     console.log('exercise to be erased', exercise);
-    console.log('exercise list', exercises);
+    console.log('exercise list', routine);
 
     /*api
       .deleteCard(exercise._id, token)
       .then(
-        setExercises((state) => {
+        setRoutine((state) => {
           const remainingExercises = state.filter(
             (c) => c._id !== exercise._id
           );
@@ -238,7 +238,7 @@ export default function App() {
     console.log('exercise to be added to the list', name, description);
     console.log('user that will receive the exercise', user);
     api.postCard(user, name, description, token).then((newExercise) => {
-      setExercises([newExercise.data, ...exercises]);
+      setRoutine([newExercise.data, ...routine]);
     });
   }
   ////registry
@@ -272,9 +272,9 @@ export default function App() {
     });
 
     console.log('user setted', currentUser);
-    setExercises(currentUser.exercises);
+    setRoutine(currentUser.exercises);
 
-    console.log('exercises setted', exercises);
+    console.log('exercises setted', routine);
     getUserRole(currentUser.role);
 
     console.log('role setted trainer,trainee', isTrainer, isTrainee);
@@ -386,9 +386,9 @@ export default function App() {
     setDescription(e.target.value);
   }
   function temp(data) {
-    //setExercises([data, ...exercises]);
+    //setRoutine([data, ...routine]);
 
-    console.log('loged exers', exercises);
+    console.log('loged exers', routine);
   }
 
   return (
@@ -424,7 +424,7 @@ export default function App() {
                 loggedIn={isTrainee && hasTrainer}
                 element={
                   <Exercises
-                    exercises={exercises}
+                    exercises={routine}
                     handleExerciseCompletion={handleExerciseCompletion}
                   />
                 }
