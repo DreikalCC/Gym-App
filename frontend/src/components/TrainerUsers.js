@@ -4,7 +4,11 @@ import { Welcome } from './Welcome';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export function TrainerUsers(props) {
-  //console.log("props on trainer to trainercard", props);
+  console.log(
+    'props on trainer to trainercard',
+    props.isTrainee,
+    props.isTrainer
+  );
   const currentUserContext = useContext(CurrentUserContext);
   function handleSubmit(e) {
     e.preventDefault();

@@ -5,7 +5,11 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export function Exercises(props) {
   const currentUserContext = useContext(CurrentUserContext);
-  console.log('exercises to user exe card', props.exercises);
+  console.log(
+    'exercises to user exe card',
+    props.props.isTrainee,
+    props.isTrainer
+  );
   console.log('currentUser on exercises to user exe card', currentUserContext);
   return (
     <>

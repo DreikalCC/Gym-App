@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useCallback } from 'react';
 import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { Header } from './Header';
@@ -14,6 +14,7 @@ import { Login } from './Login';
 import { Register } from './Register';
 import { InfoTooltip } from './InfoTooltip';
 import { Trainers } from './Trainers';
+import { dummyUser } from '../utils/constants';
 
 export default function App() {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ export default function App() {
     description: '',
   });
   const [isTrainer, setIsTrainer] = React.useState(false);
-  const [isTrainee, setIsTrainee] = React.useState(false);
+  const [isTraineeeee, setIsTraineeee] = React.useState(false);
   const [hasTrainer, setHasTrainer] = React.useState(false);
   const [exercise, setExercise] = React.useState([]);
   const [routine, setRoutine] = React.useState([]);
@@ -227,52 +228,38 @@ export default function App() {
       setRoutine([newExercise.data, ...routine]);
     });
   }
+
+  useEffect(() => {
+    console.log('user setted', currentUser);
+    checkForTrainer(currentUser.trainer);
+    const roles = currentUser.role;
+    if (roles === 'trainer') {
+      console.log('was a trainer');
+      setIsTrainer(true);
+    }
+    if (roles === 'trainee') {
+      console.log('was a trainee');
+      setIsTraineeee(true);
+    }
+
+    //getUserRole(currentUser.role);
+    routing(currentUser.role);
+    console.log('exercises pre--setted', currentUser.exercises);
+    setRoutine(currentUser.exercises);
+    console.log('exercises setted', routine);
+
+    setEmail(email);
+    console.log('mail setted', email);
+    setLoggedIn(true);
+    console.log('logged in setted', loggedIn);
+  }, [currentUser]);
+
   ////registry
   function handleLoginSubmit({ email, password }) {
     console.log('log in submitted', email, password);
-    setCurrentUser({
-      name: 'user 1',
-      _id: '007',
-      exercises: [
-        {
-          name: 'exercise 1',
-          description: '3x12 bench press',
-          _id: '00001',
-          completed: [],
-        },
-        {
-          name: 'exercise 2',
-          description: '3x12 back press',
-          _id: '00002',
-          completed: ['007'],
-        },
-      ],
-      role: 'trainee',
-      trainer: [
-        {
-          name: 'Trainer 2',
-          _id: '002',
-          trainees: ['007'],
-        },
-      ],
-    });
 
-    console.log('user setted', currentUser);
-    setRoutine(currentUser.exercises);
+    setCurrentUser();
 
-    console.log('exercises setted', routine);
-    getUserRole(currentUser.role);
-
-    console.log('role setted trainer,trainee', isTrainer, isTrainee);
-    setLoggedIn(true);
-
-    console.log('logged in setted', loggedIn);
-    setEmail(email);
-
-    console.log('mail setted', email);
-    routeLoggedUser();
-
-    console.log('routed user to correct link?');
     /*auth
       .authorize(email, password)
       .then((data) => {
@@ -283,7 +270,7 @@ export default function App() {
         setEmail(data.user.email);
         setUser
         if (userRole === 'trainee') {
-          setIsTrainee(true);
+          setIsTraineeee(true);
       navigate('/');
         }
         if (userRole === 'trainer') {
@@ -296,20 +283,43 @@ export default function App() {
         console.log(err);
       });*/
   }
-  function routeLoggedUser() {
-    console.log('routed executed, now redirecting');
-    if (userRole === 'trainee') {
+  function routing(user) {
+    console.log('routing initiated');
+    console.log('role setted trainer,trainee', isTrainer, isTraineeeee);
+    setTimeout(() => {
+      console.log(
+        'routed executed, now redirecting',
+        isTraineeeee,
+        isTrainer,
+        loggedIn
+      );
+      if (user === 'trainee') {
+        console.log('knows is traineeeee');
+        //checkForTrainer(currentUser.trainer);
+        //setIsTraineeee(true);
+        navigate('/trainers');
+      }
+      if (user === 'trainer') {
+        console.log('knows is trainerrr');
+        //setIsTrainer(true);
+        navigate('/users');
+      }
+    }, 5000);
+  }
+  /*function routeLoggedUser(user) {
+    console.log('routed executed, now redirecting', user);
+    if (user === 'trainee') {
       console.log('knows is traineeeee');
       checkForTrainer(currentUser.trainer);
-      setIsTrainee(true);
+      setIsTraineeee(true);
       navigate('/trainers');
     }
-    if (userRole === 'trainer') {
+    if (user === 'trainer') {
       console.log('knows is trainerrr');
       setIsTrainer(true);
       navigate('/users');
     }
-  }
+  }*/
   function handleLogout() {
     setLoggedIn(false);
     localStorage.removeItem('jwt');
@@ -325,7 +335,7 @@ export default function App() {
       password,
       role
     );
-    auth
+    /*auth
       .register(name, lastname, email, password, role)
       .then((res) => {
         navigate('/login');
@@ -338,7 +348,7 @@ export default function App() {
         setSuccess(false);
         setIsTooltipOpen(true);
         console.log(err);
-      });
+      });*/
   }
   function checkForTrainer(user) {
     console.log('will check for trainer', user);
@@ -348,16 +358,17 @@ export default function App() {
     setHasTrainer(true);
   }
 
-  function getUserRole(user) {
+  /*function getUserRole(user) {
     console.log('will check for the role', user);
     if (user === 'trainee') {
-      setIsTrainee(true);
+      setIsTraineeee(true);
+      console.log('was a trainee');
     }
     if (user === 'trainer') {
       setIsTrainer(true);
+      console.log('was a trainer');
     }
-  }
-
+  }*/
   ////events handlers
   function handleExerciseChange(e) {
     setExercise(e.target.value);
@@ -403,9 +414,11 @@ export default function App() {
             path='/trainers'
             element={
               <ProtectedRoute
-                loggedIn={isTrainee && !hasTrainer}
+                loggedIn={isTraineeeee && !hasTrainer}
                 element={
                   <Trainers
+                    isTrainee={isTraineeeee}
+                    isTrainer={isTrainer}
                     trainerList={trainerList}
                     trainerSelect={handleTrainerSelect}
                   />
@@ -417,9 +430,11 @@ export default function App() {
             path='/exercises'
             element={
               <ProtectedRoute
-                loggedIn={isTrainee && hasTrainer}
+                loggedIn={isTraineeeee && hasTrainer}
                 element={
                   <Exercises
+                    isTrainee={isTraineeeee}
+                    isTrainer={isTrainer}
                     exercises={routine}
                     handleExerciseCompletion={handleExerciseCompletion}
                   />
@@ -434,6 +449,8 @@ export default function App() {
                 loggedIn={loggedIn && isTrainer}
                 element={
                   <TrainerUsers
+                    isTrainee={isTraineeeee}
+                    isTrainer={isTrainer}
                     temp={temp}
                     userList={userList}
                     handleAddExercise={handleAddExercise}
