@@ -255,10 +255,15 @@ export default function App() {
   }, [currentUser]);
 
   ////registry
+
   function handleLoginSubmit({ email, password }) {
     console.log('log in submitted', email, password);
-
-    setCurrentUser();
+    const loggedUser = dummyUser.find((person) => {
+      if (person.email === email) return person;
+    });
+    console.log('usuario encontrado', loggedUser);
+    localStorage.setItem('jwt', loggedUser);
+    setCurrentUser(loggedUser);
 
     /*auth
       .authorize(email, password)
