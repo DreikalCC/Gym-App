@@ -3,13 +3,11 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { TrainerExerciseCard } from './TrainerExerciseCard';
 
 export function TraineeCard({
-  temp,
   data,
   handleEraseExerciseClick,
   onNameChange,
   onDescriptionChange,
   onSubmit,
-  onUserChange,
 }) {
   const user = data;
   const currentUser = useContext(CurrentUserContext);
@@ -25,7 +23,7 @@ export function TraineeCard({
         {user.exercises.map((exercise) => {
           return (
             <TrainerExerciseCard
-              temp={temp}
+              user={user}
               key={exercise._id}
               data={exercise}
               onEraseClick={handleEraseExerciseClick}

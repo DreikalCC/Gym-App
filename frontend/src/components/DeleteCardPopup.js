@@ -4,7 +4,7 @@ import { PopupWithForm } from './PopupWithForm';
 export function DeleteCardPopup(props) {
   function handleSubmit(e) {
     e.preventDefault();
-    props.onConfirm(props.card);
+    props.onConfirm(props.card, props.selectedUser);
   }
   return (
     <PopupWithForm

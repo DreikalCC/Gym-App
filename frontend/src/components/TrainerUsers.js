@@ -4,18 +4,14 @@ import { Welcome } from './Welcome';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export function TrainerUsers(props) {
-  console.log(
-    'props on trainer to trainercard',
-    props.isTrainee,
-    props.isTrainer
-  );
+  console.log('props on trainer to trainercard', props);
   const currentUserContext = useContext(CurrentUserContext);
   function handleSubmit(e) {
     e.preventDefault();
     props.handleAddExercise({
       name: e.target.exercise.value,
       description: e.target.description.value,
-      user: e.target.user.value,
+      id: e.target.user.value,
     });
   }
   return (
@@ -35,7 +31,6 @@ export function TrainerUsers(props) {
               <TraineeCard
                 key={user._id}
                 data={user}
-                temp={props.temp}
                 handleEraseExerciseClick={props.handleEraseExerciseClick}
                 onSubmit={handleSubmit}
               />

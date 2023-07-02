@@ -8,7 +8,7 @@ export function UserExerciseCard(props) {
   const exercise = props.data;
   console.log('exercise inside the card', exercise);
   //console.log("exercise in card", exercise);
-  const isCompleted = exercise.completed.some((i) => i === currentUser._id);
+  let isCompleted = exercise.completed.some((i) => i === currentUser._id);
   console.log('is the exercise completed inside the card?', isCompleted);
   const exerciseCompletedClassName = `element ${
     isCompleted ? 'element_completed' : ''
@@ -26,6 +26,7 @@ export function UserExerciseCard(props) {
           className={exerciseCompletedButtonClassName}
           onClick={() => {
             props.handleExerciseCompletion(exercise, isCompleted);
+            /*isCompleted = !isCompleted;*/
           }}
         >
           {isCompleted ? 'completado' : 'completar'}

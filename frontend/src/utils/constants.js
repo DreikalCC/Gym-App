@@ -19,13 +19,13 @@ export const dummyUser = [
       },
     ],
     role: 'trainee',
-    trainer: [
+    trainer: [] /*[
       {
         name: 'Trainer 2',
         _id: 'T002',
         trainees: ['007'],
       },
-    ],
+    ]*/,
   },
   {
     name: 'user 2',
@@ -41,7 +41,7 @@ export const dummyUser = [
       },
       {
         name: 'exercise 2',
-        description: '3x12 back press',
+        description: '4x12 back press',
         _id: '00002',
         completed: [],
       },

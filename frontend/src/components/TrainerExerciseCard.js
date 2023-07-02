@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export function TrainerExerciseCard(props) {
-  props.temp(props.data);
   console.log('props on exercise card', props);
   const currentUser = useContext(CurrentUserContext);
   /*const isOwn = props.data.owner[0] === currentUser._id;
@@ -26,7 +25,7 @@ export function TrainerExerciseCard(props) {
           id='erase-btn'
           className='element__erase'
           onClick={() => {
-            props.onEraseClick(props.data);
+            props.onEraseClick(props.data, props.user);
           }}
         ></button>
       </div>
