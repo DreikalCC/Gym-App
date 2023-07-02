@@ -1,7 +1,9 @@
 # Gym-App
 App designed for trainers to gice a routine to their trainees, and allow the trainees to keep track of their daily routine
 
-Aplicación sencilla para gimnasios, donde los usuarios pueden registrarse y seleccionar a su entrenador, a su vez los entrenadores se pueden registrar y ver la lista de usuarios que los han seleccionado, 
+Aplicación sencilla para gimnasios, donde los usuarios pueden registrarse y seleccionar a su entrenador para recibir su rutina de ejercicios por parte del entrenador seleccionado.
+
+A su vez los entrenadores se pueden registrar y verificar que son entrenadores ingresando el codigo "Train", los entrenadores pueden ver la lista de usuarios que los han seleccionado, 
 siendo solo estos usuarios los cuales pueden recibir rutinas por parte de los entrenadores.
 
 Cada entrenador puede agregar un nombre de ejercicio y una descripcion del mismo, de ser necesario puede eliminar el ejercicio que se desee quitar de la lista.
