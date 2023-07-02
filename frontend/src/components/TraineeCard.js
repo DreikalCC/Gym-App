@@ -12,9 +12,7 @@ export function TraineeCard({
   const user = data;
   const currentUser = useContext(CurrentUserContext);
   const isOwn = user.trainer[0]._id === currentUser._id;
-  console.log('is this the trainer;s trainee??', isOwn);
   const userClassName = `${isOwn ? 'element' : 'element_disabled'}`;
-  console.log('user in card', user);
 
   return (
     <div className={userClassName}>

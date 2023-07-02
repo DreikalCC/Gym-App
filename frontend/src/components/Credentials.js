@@ -14,7 +14,7 @@ export function Credentials({
   onSubmit,
 }) {
   const [radioState, setRadioState] = React.useState(false);
-  const isFull = link === 'log in';
+  const isFull = title === 'Sign up';
   const fullClassName = `${
     isFull ? 'input__form input__form_credentials' : 'input__form_disabled'
   }`;

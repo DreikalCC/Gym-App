@@ -139,11 +139,9 @@ export default function App() {
   ////card functions
 
   function handleTrainerSelect(trainer) {
-    console.log('trainer selected', trainer);
     trainer.trainees.push(currentUser);
     currentUser.trainer.push(trainer);
     setTimeout(() => {
-      console.log('current users trainer', currentUser.trainer);
       navigate('/exercises');
     }, 100);
 
@@ -173,7 +171,6 @@ export default function App() {
       );
       setRoutine(update);
     }
-    console.log('new exercise completed data', exercise);
     //setRoutine();
     /*api
       .changeExerciseStatus(exercise._id, isCompleted, token)
@@ -186,8 +183,6 @@ export default function App() {
       });*/
   }
   function handleAddExercise({ name, description, id }) {
-    console.log('exercise to be added to the list', name, description);
-    console.log('user that will receive the exercise', id);
     const receiver = userList.find((person) => {
       return person._id === id;
     });
@@ -199,7 +194,6 @@ export default function App() {
       },
     });
 
-    console.log('receiver got exercises', receiver);
     const updatedList = userList.map((u) => (u._id === id ? receiver : u));
     setUserList(updatedList);
     /*api.postCard(user, name, description, token).then((newExercise) => {
@@ -208,10 +202,6 @@ export default function App() {
   }
 
   function handleEraseExercise(exercise, selectedUser) {
-    console.log('exercise to be erased', exercise);
-    console.log('exercise list', routine);
-    console.log('selectedUser given', selectedUser);
-
     selectedUser.exercises = selectedUser.exercises.filter(
       (exe) => exe._id !== exercise._id
     );
@@ -236,8 +226,6 @@ export default function App() {
   }
   ////edition functions
   function handleEraseExerciseClick(card, id) {
-    console.log('this is the exercise selected as card', card);
-    console.log('this is the user selected as card', id);
     setDeletableCard(card);
     setUserIdExercise(id);
 
@@ -276,14 +264,15 @@ export default function App() {
   ////registry
 
   function handleLoginSubmit({ email, password }) {
-    console.log('log in submitted', email, password);
+    console.log('dummy list', dummyUser);
     const loggedUser = dummyUser.find((person) => {
       return person.email === email;
     });
     if (!loggedUser) {
       alert('Usuario invalido');
+      return;
     }
-    console.log('usuario encontrado', loggedUser);
+    console.log('logged user is:', loggedUser);
     setCurrentUser(loggedUser);
 
     /*auth
@@ -310,20 +299,8 @@ export default function App() {
       });*/
   }
   function routing(user) {
-    console.log('routing initiated');
-    /*navigate('/trainers');
-    return;*/
-    console.log('role setted role, user', user);
     setTimeout(() => {
-      console.log(
-        'routed executed, now redirecting',
-        currentUser.role,
-        loggedIn
-      );
       if (user === 'trainee') {
-        console.log('knows is traineeeee');
-        //checkForTrainer(currentUser.trainer);
-        //setIsTraineeee(true);
         if (currentUser.trainer.length === 0) {
           navigate('/trainers');
         }
@@ -332,28 +309,70 @@ export default function App() {
         }
       }
       if (user === 'trainer') {
-        console.log('knows is trainerrr');
-        //setIsTrainer(true);
         navigate('/users');
       }
-    }, 100);
+    }, 2000);
   }
 
   function handleLogout() {
     setLoggedIn(false);
     localStorage.removeItem('user');
     setEmail('');
+    setCurrentUser('');
     navigate('/login');
   }
   function handleSignupSubmit({ name, lastname, email, password, role }) {
-    console.log(
-      'data from registration',
-      name,
-      lastname,
-      email,
-      password,
-      role
-    );
+    if (role === 'trainee') {
+      userList.push({
+        name,
+        lastname,
+        email,
+        password,
+        role,
+        _id: () => {
+          useId();
+        },
+        exercises: [],
+        trainer: [],
+      });
+      dummyUser.push({
+        name,
+        lastname,
+        email,
+        password,
+        role,
+        _id: () => {
+          useId();
+        },
+        exercises: [],
+        trainer: [],
+      });
+    }
+    if (role === 'trainer') {
+      trainerList.push({
+        name,
+        lastname,
+        email,
+        password,
+        role,
+        _id: () => {
+          useId();
+        },
+        trainees: [],
+      });
+      dummyUser.push({
+        name,
+        lastname,
+        email,
+        password,
+        role,
+        _id: () => {
+          useId();
+        },
+        trainees: [],
+      });
+    }
+    navigate('/login');
     /*auth
       .register(name, lastname, email, password, role)
       .then((res) => {

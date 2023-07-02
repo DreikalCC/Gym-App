@@ -6,7 +6,6 @@ export function PopupWithForm({
   title,
   buttonText,
 }) {
-  console.log('props on the popup form', onClose);
   return (
     <section
       id={name}
