@@ -18,7 +18,6 @@ export function Register(props) {
         handleNameChange={props.handleNameChange}
         handleLastnameChange={props.handleLastnameChange}
         handleEmailChange={props.handleEmailChange}
-        handleTrainerCodeChange={props.handleTrainerCodeChange}
         handlePasswordChange={props.handlePasswordChange}
         title='Sign up'
         buttonText='Sign up'

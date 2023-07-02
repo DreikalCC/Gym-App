@@ -95,7 +95,7 @@ export default function App() {
 
   const [currentUser, setCurrentUser] = React.useState({});
   const [deletableCard, setDeletableCard] = React.useState('');
-  const [trainerCode, setTrainerCode] = React.useState('');
+  //const [trainerCode, setTrainerCode] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [userIdExercise, setUserIdExercise] = React.useState('');
   const [lastname, setLastname] = React.useState('');
@@ -405,9 +405,9 @@ export default function App() {
   function handleEmailChange(e) {
     setEmail(e.target.value);
   }
-  function handleTrainerCodeChange(e) {
+  /*function handleTrainerCodeChange(e) {
     setTrainerCode(e.target.value);
-  }
+  }*/
   function handlePasswordChange(e) {
     setPassword(e.target.value);
   }
@@ -485,7 +485,6 @@ export default function App() {
                 onNameChange={handleNameChange}
                 onLastnameChange={handleLastnameChange}
                 onEmailChange={handleEmailChange}
-                onTrainerCodeChange={handleTrainerCodeChange}
                 onPasswordChange={handlePasswordChange}
                 onSignupSubmit={handleSignupSubmit}
               />

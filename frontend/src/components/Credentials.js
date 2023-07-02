@@ -10,10 +10,23 @@ export function Credentials({
   handleEmailChange,
   handleUserNameChange,
   handleLastnameChange,
-  handleTrainerCodeChange,
   onSubmit,
 }) {
   const [radioState, setRadioState] = React.useState(false);
+  const [trainerCode, setTrainerCode] = React.useState('');
+  const handleTrainerCodeChange = (e) => setTrainerCode(e.target.value);
+  const correctCode = () => {
+    if (!radioState) {
+      return true;
+    }
+    if (radioState) {
+      if (trainerCode === 'Train') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
   const isFull = title === 'Sign up';
   const fullClassName = `${
     isFull ? 'input__form input__form_credentials' : 'input__form_disabled'
@@ -92,6 +105,7 @@ export function Credentials({
             />
           </div>
           <button
+            disabled={!correctCode}
             type='submit'
             className='edit__submit-btn edit__submit-btn_log'
           >
