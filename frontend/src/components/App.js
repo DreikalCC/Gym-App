@@ -22,13 +22,6 @@ export default function App() {
   const [isEraseCardPopupOpen, setEraseCardPopupOpen] = React.useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = React.useState(false);
   const [isMenuOn, setIsMenuOn] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState({
-    name: '',
-    description: '',
-  });
-  //const [isTrainer, setIsTrainer] = React.useState(false);
-  //const [isTraineeeee, setIsTraineeee] = React.useState(false);
-  const [hasTrainer, setHasTrainer] = React.useState(false);
   const [exercise, setExercise] = React.useState([]);
   const [routine, setRoutine] = React.useState([]);
   const [userList, setUserList] = React.useState([
@@ -104,7 +97,6 @@ export default function App() {
   const [deletableCard, setDeletableCard] = React.useState('');
   const [trainerCode, setTrainerCode] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [userRole, setUserRole] = React.useState('');
   const [userIdExercise, setUserIdExercise] = React.useState('');
   const [lastname, setLastname] = React.useState('');
   const [name, setName] = React.useState('');
@@ -112,7 +104,7 @@ export default function App() {
   const [loggedIn, setLoggedIn] = React.useState(true);
   const [email, setEmail] = React.useState('');
   const [success, setSuccess] = React.useState(false);
-  const [token, setToken] = React.useState(localStorage.getItem('jwt'));
+  //const [token, setToken] = React.useState(localStorage.getItem('jwt'));
   //let randomId = useId();
   /*const handleTokenCheckMemo = useCallback((token) => {
     if (!token) return;
@@ -145,14 +137,6 @@ export default function App() {
   }*/
 
   ////card functions
-  /*function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i === currentUser._id);
-    api.changeLikeCardStatus(card._id, isLiked, token).then((newCards) => {
-      setCards((state) => {
-        return state.map((c) => (c._id === card._id ? newCards.data : c));
-      });
-    });
-  }*/
 
   function handleTrainerSelect(trainer) {
     console.log('trainer selected', trainer);
@@ -283,37 +267,10 @@ export default function App() {
       return;
     }
     localStorage.setItem('user', JSON.stringify(currentUser));
-    console.log('user setted', currentUser);
-    console.log(
-      'checkForTrainer',
-      currentUser.role === 'trainee' && !currentUser.trainer.length > 1
-    );
-    console.log(
-      'checkForTrainer',
-      currentUser.role === 'trainee' && currentUser.trainer.length > 0
-    );
-    //checkForTrainer(currentUser.trainer);
-    //setUserRole(currentUser.role);
-    const roles = currentUser.role;
-    /*if (roles === 'trainer') {
-      console.log('was a trainer');
-      setIsTrainer(true);
-    }
-    if (roles === 'trainee') {
-      console.log('was a trainee');
-      setIsTraineeee(true);
-    }*/
-
-    //getUserRole(currentUser.role);
-    routing(roles);
-    console.log('exercises pre--setted', currentUser.exercises);
+    routing(currentUser.role);
     setRoutine(currentUser.exercises);
-    console.log('exercises setted', routine);
-
     setEmail(email);
-    console.log('mail setted', email);
     setLoggedIn(true);
-    console.log('logged in setted', loggedIn);
   }, [currentUser]);
 
   ////registry
@@ -327,7 +284,6 @@ export default function App() {
       alert('Usuario invalido');
     }
     console.log('usuario encontrado', loggedUser);
-    //localStorage.setItem('jwt', loggedUser);
     setCurrentUser(loggedUser);
 
     /*auth
@@ -385,7 +341,7 @@ export default function App() {
 
   function handleLogout() {
     setLoggedIn(false);
-    localStorage.removeItem('jwt');
+    localStorage.removeItem('user');
     setEmail('');
     navigate('/login');
   }
@@ -414,17 +370,6 @@ export default function App() {
       });*/
   }
 
-  /*function getUserRole(user) {
-    console.log('will check for the role', user);
-    if (user === 'trainee') {
-      setIsTraineeee(true);
-      console.log('was a trainee');
-    }
-    if (user === 'trainer') {
-      setIsTrainer(true);
-      console.log('was a trainer');
-    }
-  }*/
   ////events handlers
   function handleExerciseChange(e) {
     setExercise(e.target.value);
