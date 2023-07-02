@@ -14,9 +14,11 @@ se puede probar la aplicación con el comando: npm run start
 los usuarios que se encuentran registrados para pruebas son los siguientes:
 
 usuario 1 email: test@test.com password: 123
+
 usuario 2 email: test2@test.com password: 123
 
 Trainer 1 email: test3@test.com password: 123
+
 Trainer 2 email: test4@test.com password: 123
 
 Esta aplicación se presentara como Full Stack. por el momento se entrega la parte del Front-End
