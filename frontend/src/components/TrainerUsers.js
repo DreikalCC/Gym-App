@@ -13,7 +13,6 @@ export function TrainerUsers(props) {
       id: e.target.user.value,
     });
   }
-  console.log('props', props);
   return (
     <>
       <section className='profile'>
