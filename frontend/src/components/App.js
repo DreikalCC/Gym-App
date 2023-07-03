@@ -1,5 +1,4 @@
 import React, { useEffect, useId } from 'react';
-//import { useCallback } from 'react';
 import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
@@ -101,7 +100,7 @@ export default function App() {
   const [name, setName] = React.useState('');
   const [exercise, setExercise] = React.useState('');
   const [description, setDescription] = React.useState('');
-  const [loggedIn, setLoggedIn] = React.useState(true);
+  const [loggedIn, setLoggedIn] = React.useState(false);
   const [email, setEmail] = React.useState('');
   const [success, setSuccess] = React.useState(false);
   //const [token, setToken] = React.useState(localStorage.getItem('jwt'));
@@ -269,9 +268,11 @@ export default function App() {
     }
     localStorage.setItem('jwt', JSON.stringify(currentUser));
     routing(currentUser.role);
+
     setRoutine(currentUser.exercises);
     setEmail(currentUser.email);
     setLoggedIn(true);
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   ////registry
@@ -321,7 +322,6 @@ export default function App() {
       return;
     }
   }
-
   function handleLogout() {
     setLoggedIn(false);
     localStorage.removeItem('jwt');
