@@ -5,20 +5,20 @@ export function Register(props) {
   function handleSubmit(e) {
     e.preventDefault();
     props.onSignupSubmit({
-      name: e.target.name.value,
-      lastname: e.target.lastname.value,
-      email: e.target.email.value,
-      password: e.target.password.value,
+      name: props.name,
+      lastname: props.lastname,
+      email: props.email,
+      password: props.password,
       role: e.target.role.value,
     });
   }
   return (
     <section className='credentials'>
       <Credentials
-        handleNameChange={props.handleNameChange}
-        handleLastnameChange={props.handleLastnameChange}
-        handleEmailChange={props.handleEmailChange}
-        handlePasswordChange={props.handlePasswordChange}
+        handleNameChange={props.onNameChange}
+        handleLastnameChange={props.onLastnameChange}
+        handleEmailChange={props.onEmailChange}
+        handlePasswordChange={props.onPasswordChange}
         title='Sign up'
         buttonText='Sign up'
         linkText='Already a member? Log in here!'

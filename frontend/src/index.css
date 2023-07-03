@@ -7,6 +7,7 @@
 @import url(./blocks/header/__menu/__menu.css);
 @import url(./blocks/header/__menu/__menu_active.css);
 @import url(./blocks/header/__user/__user.css);
+@import url(./blocks/header/__user/__user_disabled.css);
 @import url(./blocks/header/__user-stat/__user-stat.css);
 @import url(./blocks/header/__user-stat/__user-stat_active.css);
 @import url(./blocks/header/__logo/__logo.css);

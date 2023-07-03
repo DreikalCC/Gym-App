@@ -8,11 +8,12 @@ export function TrainerUsers(props) {
   function handleSubmit(e) {
     e.preventDefault();
     props.handleAddExercise({
-      name: e.target.exercise.value,
-      description: e.target.description.value,
+      exercise: props.exercise,
+      description: props.description,
       id: e.target.user.value,
     });
   }
+  console.log('props', props);
   return (
     <>
       <section className='profile'>
@@ -31,6 +32,8 @@ export function TrainerUsers(props) {
                 key={user._id}
                 data={user}
                 handleEraseExerciseClick={props.handleEraseExerciseClick}
+                handleDescriptionChange={props.onDescriptionChange}
+                handleExerciseChange={props.onExerciseChange}
                 onSubmit={handleSubmit}
               />
             );

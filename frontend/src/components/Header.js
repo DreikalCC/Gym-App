@@ -27,12 +27,20 @@ export function Header(props) {
             : 'header__user-stat'
         }
       >
-        <p className='header__user'>{props.email}</p>
+        <p
+          className={
+            props.loggedIn
+              ? 'header__user'
+              : 'header__user header__user_disabled'
+          }
+        >
+          {props.email}
+        </p>
         <button
           onClick={props.loggedIn ? signOut : logIn}
           className='header__log-btn'
         >
-          {props.loggedIn ? 'Log Out' : 'Sign In'}
+          {props.loggedIn ? 'Log Out' : ''}
         </button>
       </div>
       <img className='header__line' src={line} alt='underline' />

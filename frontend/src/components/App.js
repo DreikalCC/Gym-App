@@ -1,12 +1,12 @@
 import React, { useEffect, useId } from 'react';
-import { useCallback } from 'react';
+//import { useCallback } from 'react';
 import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { Exercises } from './Exercises';
 import { TrainerUsers } from './TrainerUsers';
-import api from '../utils/api';
-import * as auth from '../utils/auth';
+//import api from '../utils/api';
+//import * as auth from '../utils/auth';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { DeleteCardPopup } from './DeleteCardPopup';
 import { ProtectedRoute } from './ProtectedRoute';
@@ -22,7 +22,6 @@ export default function App() {
   const [isEraseCardPopupOpen, setEraseCardPopupOpen] = React.useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = React.useState(false);
   const [isMenuOn, setIsMenuOn] = React.useState(false);
-  const [exercise, setExercise] = React.useState([]);
   const [routine, setRoutine] = React.useState([]);
   const [userList, setUserList] = React.useState([
     {
@@ -30,12 +29,12 @@ export default function App() {
       _id: '007',
       exercises: [
         {
-          name: 'exercise 1',
+          exercise: 'exercise 1',
           description: '3x12 bench press',
           _id: '0000001',
         },
         {
-          name: 'exercise 2',
+          exercise: 'exercise 2',
           description: '3x12 back press',
           _id: '0000002',
         },
@@ -71,7 +70,7 @@ export default function App() {
     },
   ]);
 
-  const [trainerList, setTrainerList] = React.useState([
+  const trainerList = [
     {
       name: 'Trainer 1',
       _id: 'T001',
@@ -91,7 +90,7 @@ export default function App() {
       _id: 'T002',
       trainees: [],
     },
-  ]);
+  ];
 
   const [currentUser, setCurrentUser] = React.useState({});
   const [deletableCard, setDeletableCard] = React.useState('');
@@ -100,6 +99,7 @@ export default function App() {
   const [userIdExercise, setUserIdExercise] = React.useState('');
   const [lastname, setLastname] = React.useState('');
   const [name, setName] = React.useState('');
+  const [exercise, setExercise] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [loggedIn, setLoggedIn] = React.useState(true);
   const [email, setEmail] = React.useState('');
@@ -182,18 +182,17 @@ export default function App() {
         });
       });*/
   }
-  function handleAddExercise({ name, description, id }) {
+  function handleAddExercise({ exercise, description, id }) {
     const receiver = userList.find((person) => {
       return person._id === id;
     });
     receiver.exercises.push({
-      name,
+      exercise,
       description,
       _id: () => {
         useId();
       },
     });
-
     const updatedList = userList.map((u) => (u._id === id ? receiver : u));
     setUserList(updatedList);
     /*api.postCard(user, name, description, token).then((newExercise) => {
@@ -241,9 +240,23 @@ export default function App() {
     setDeletableCard('');
     setUserIdExercise('');
   }
-
+  function routing(user) {
+    setTimeout(() => {
+      if (user === 'trainee') {
+        if (currentUser.trainer.length === 0) {
+          navigate('/trainers');
+        }
+        if (currentUser.trainer.length > 0) {
+          navigate('/exercises');
+        }
+      }
+      if (user === 'trainer') {
+        navigate('/users');
+      }
+    }, 100);
+  }
   useEffect(() => {
-    const saveData = localStorage.getItem('user');
+    const saveData = localStorage.getItem('jwt');
     if (saveData) {
       const user = JSON.parse(saveData);
       setCurrentUser(user);
@@ -254,26 +267,27 @@ export default function App() {
     if (!currentUser || !currentUser._id) {
       return;
     }
-    localStorage.setItem('user', JSON.stringify(currentUser));
+    localStorage.setItem('jwt', JSON.stringify(currentUser));
     routing(currentUser.role);
     setRoutine(currentUser.exercises);
-    setEmail(email);
+    setEmail(currentUser.email);
     setLoggedIn(true);
   }, [currentUser]);
 
   ////registry
 
   function handleLoginSubmit({ email, password }) {
-    console.log('dummy list', dummyUser);
     const loggedUser = dummyUser.find((person) => {
       return person.email === email;
     });
     if (!loggedUser) {
       alert('Usuario invalido');
+      setSuccess(false);
       return;
     }
-    console.log('logged user is:', loggedUser);
-    setCurrentUser(loggedUser);
+    checkPassword(loggedUser, password);
+    //setSuccess(true);
+    //setCurrentUser(loggedUser);
 
     /*auth
       .authorize(email, password)
@@ -298,25 +312,19 @@ export default function App() {
         console.log(err);
       });*/
   }
-  function routing(user) {
-    setTimeout(() => {
-      if (user === 'trainee') {
-        if (currentUser.trainer.length === 0) {
-          navigate('/trainers');
-        }
-        if (currentUser.trainer.length > 0) {
-          navigate('/exercises');
-        }
-      }
-      if (user === 'trainer') {
-        navigate('/users');
-      }
-    }, 2000);
+  function checkPassword(loggedUser, password) {
+    if (loggedUser.password === password) {
+      setSuccess(true);
+      setCurrentUser(loggedUser);
+    } else {
+      setSuccess(false);
+      return;
+    }
   }
 
   function handleLogout() {
     setLoggedIn(false);
-    localStorage.removeItem('user');
+    localStorage.removeItem('jwt');
     setEmail('');
     setCurrentUser('');
     navigate('/login');
@@ -405,9 +413,6 @@ export default function App() {
   function handleEmailChange(e) {
     setEmail(e.target.value);
   }
-  /*function handleTrainerCodeChange(e) {
-    setTrainerCode(e.target.value);
-  }*/
   function handlePasswordChange(e) {
     setPassword(e.target.value);
   }
@@ -468,6 +473,10 @@ export default function App() {
                     userList={userList}
                     handleAddExercise={handleAddExercise}
                     handleEraseExerciseClick={handleEraseExerciseClick}
+                    onDescriptionChange={handleDescriptionChange}
+                    onExerciseChange={handleExerciseChange}
+                    exercise={exercise}
+                    description={description}
                   />
                 }
               />
@@ -487,6 +496,10 @@ export default function App() {
                 onEmailChange={handleEmailChange}
                 onPasswordChange={handlePasswordChange}
                 onSignupSubmit={handleSignupSubmit}
+                name={name}
+                lastname={lastname}
+                email={email}
+                password={password}
               />
             }
           />

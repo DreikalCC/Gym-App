@@ -8,7 +8,7 @@ export function Credentials({
   link,
   handlePasswordChange,
   handleEmailChange,
-  handleUserNameChange,
+  handleNameChange,
   handleLastnameChange,
   onSubmit,
 }) {
@@ -42,7 +42,7 @@ export function Credentials({
             type='name'
             placeholder='Name'
             className={fullClassName}
-            onChange={handleUserNameChange}
+            onChange={handleNameChange}
           />
           <input
             required={isFull}

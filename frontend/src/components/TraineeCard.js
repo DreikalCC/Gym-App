@@ -5,8 +5,8 @@ import { TrainerExerciseCard } from './TrainerExerciseCard';
 export function TraineeCard({
   data,
   handleEraseExerciseClick,
-  onNameChange,
-  onDescriptionChange,
+  handleDescriptionChange,
+  handleExerciseChange,
   onSubmit,
 }) {
   const user = data;
@@ -35,7 +35,7 @@ export function TraineeCard({
                 required
                 id='exercise-name-input'
                 name='exercise'
-                onChange={onNameChange}
+                onChange={handleExerciseChange}
                 type='text'
                 placeholder='Ejercicio'
                 className='input__form input__name input__name_gallery'
@@ -49,7 +49,7 @@ export function TraineeCard({
                 required
                 id='description-input'
                 name='description'
-                onChange={onDescriptionChange}
+                onChange={handleDescriptionChange}
                 type='text'
                 placeholder='Descripción'
                 className='input__form input__description'

@@ -1,13 +1,12 @@
-import React, { useContext } from 'react';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import React from 'react';
 
 export function TrainerExerciseCard(props) {
-  const currentUser = useContext(CurrentUserContext);
+  console.log('props en exer', props.data);
 
   return (
     <div className='element'>
       <div className='element__group'>
-        <h3 className='element__location'>{props.data.name}</h3>
+        <h3 className='element__location'>{props.data.exercise}</h3>
         <p className='element__description'>{props.data.description}</p>
         <button
           id='erase-btn'
