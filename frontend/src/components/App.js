@@ -287,8 +287,6 @@ export default function App() {
       return;
     }
     checkPassword(loggedUser, password);
-    //setSuccess(true);
-    //setCurrentUser(loggedUser);
 
     /*auth
       .authorize(email, password)
