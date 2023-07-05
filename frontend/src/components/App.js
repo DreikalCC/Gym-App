@@ -188,9 +188,7 @@ export default function App() {
     receiver.exercises.push({
       exercise,
       description,
-      _id: () => {
-        useId();
-      },
+      _id: (()=>{useId()}),
     });
     const updatedList = userList.map((u) => (u._id === id ? receiver : u));
     setUserList(updatedList);
@@ -335,9 +333,7 @@ export default function App() {
         email,
         password,
         role,
-        _id: () => {
-          useId();
-        },
+        _id: (()=>{useId()}),
         exercises: [],
         trainer: [],
       });
@@ -347,9 +343,7 @@ export default function App() {
         email,
         password,
         role,
-        _id: () => {
-          useId();
-        },
+        _id: (()=>{useId()}),
         exercises: [],
         trainer: [],
       });
@@ -361,9 +355,7 @@ export default function App() {
         email,
         password,
         role,
-        _id: () => {
-          useId();
-        },
+        _id: (()=>{useId()}),
         trainees: [],
       });
       dummyUser.push({
@@ -372,9 +364,7 @@ export default function App() {
         email,
         password,
         role,
-        _id: () => {
-          useId();
-        },
+        _id: (()=>{useId()}),
         trainees: [],
       });
     }
