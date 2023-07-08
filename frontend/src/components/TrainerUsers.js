@@ -30,6 +30,7 @@ export function TrainerUsers(props) {
               <TraineeCard
                 key={user._id}
                 data={user}
+                routine={props.routine}
                 handleEraseExerciseClick={props.handleEraseExerciseClick}
                 handleDescriptionChange={props.onDescriptionChange}
                 handleExerciseChange={props.onExerciseChange}

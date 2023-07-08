@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { TrainerSelect } from './TrainerSelect';
 import { Welcome } from './Welcome';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+//import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export function Trainers(props) {
-  const currentUserContext = useContext(CurrentUserContext);
+  //const currentUserContext = useContext(CurrentUserContext);
   return (
     <>
       <section className='profile'>

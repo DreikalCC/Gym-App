@@ -17,7 +17,7 @@ export function Header(props) {
       <button
         onClick={props.isOpen ? props.onClose : props.handleMenuClick}
         className={
-          props.isOpen ? 'header__menu header__menu_active' : 'header__menu'
+          props.isOpen ? 'header__menu header__menu_open' : 'header__menu'
         }
       ></button>
       <div
