@@ -1,11 +1,11 @@
-import React, { useEffect, useId } from 'react';
+import React, { useEffect, useId, useCallback } from 'react';
 import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { Exercises } from './Exercises';
 import { TrainerUsers } from './TrainerUsers';
-//import api from '../utils/api';
-//import * as auth from '../utils/auth';
+import api from '../utils/api';
+import * as auth from '../utils/auth';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { DeleteCardPopup } from './DeleteCardPopup';
 import { ProtectedRoute } from './ProtectedRoute';
@@ -13,99 +13,37 @@ import { Login } from './Login';
 import { Register } from './Register';
 import { InfoTooltip } from './InfoTooltip';
 import { Trainers } from './Trainers';
-import { dummyUser } from '../utils/constants';
 
 export default function App() {
   const navigate = useNavigate();
   React.useState(false);
+
+  //tools
   const [isEraseCardPopupOpen, setEraseCardPopupOpen] = React.useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = React.useState(false);
   const [isMenuOn, setIsMenuOn] = React.useState(false);
-  const [routine, setRoutine] = React.useState([]);
-  const [userList, setUserList] = React.useState([
-    {
-      name: 'user 1',
-      _id: '007',
-      exercises: [
-        {
-          exercise: 'exercise 1',
-          description: '3x12 bench press',
-          _id: '0000001',
-        },
-        {
-          exercise: 'exercise 2',
-          description: '3x12 back press',
-          _id: '0000002',
-        },
-      ],
-      trainer: [
-        {
-          name: 'Trainer 1',
-          _id: 'T001',
-        },
-      ],
-    },
-    {
-      name: 'user 2',
-      _id: '006',
-      exercises: [],
-      trainer: [
-        {
-          name: 'Trainer 2',
-          _id: 'T002',
-        },
-      ],
-    },
-    {
-      name: 'user 3',
-      _id: '005',
-      exercises: [],
-      trainer: [
-        {
-          name: 'Trainer 1',
-          _id: 'T001',
-        },
-      ],
-    },
-  ]);
+  const [success, setSuccess] = React.useState(false);
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [token, setToken] = React.useState(localStorage.getItem('jwt'));
 
-  const trainerList = [
-    {
-      name: 'Trainer 1',
-      _id: 'T001',
-      trainees: [
-        {
-          name: 'user 1',
-          _id: '007',
-        },
-        {
-          name: 'user 2',
-          _id: '006',
-        },
-      ],
-    },
-    {
-      name: 'Trainer 2',
-      _id: 'T002',
-      trainees: [],
-    },
-  ];
-
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [deletableCard, setDeletableCard] = React.useState('');
-  //const [trainerCode, setTrainerCode] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [userIdExercise, setUserIdExercise] = React.useState('');
+  //data
+  const [description, setDescription] = React.useState('');
+  const [email, setEmail] = React.useState('');
   const [lastname, setLastname] = React.useState('');
   const [name, setName] = React.useState('');
+  const [password, setPassword] = React.useState('');
   const [exercise, setExercise] = React.useState('');
-  const [description, setDescription] = React.useState('');
-  const [loggedIn, setLoggedIn] = React.useState(false);
-  const [email, setEmail] = React.useState('');
-  const [success, setSuccess] = React.useState(false);
-  //const [token, setToken] = React.useState(localStorage.getItem('jwt'));
-  //let randomId = useId();
-  /*const handleTokenCheckMemo = useCallback((token) => {
+
+  //information
+  const [routine, setRoutine] = React.useState([]);
+  const [deletableCard, setDeletableCard] = React.useState('');
+  const [userList, setUserList] = React.useState([]);
+  const [trainerList, setTrainerList] = React.useState([]);
+  const [currentUser, setCurrentUser] = React.useState({});
+  const [userIdExercise, setUserIdExercise] = React.useState('');
+
+  //functionality
+  const handleTokenCheckMemo = useCallback((token) => {
     if (!token) return;
     auth.checkToken(token).then((res) => {
       if (res.status === true) {
@@ -114,64 +52,59 @@ export default function App() {
       }
     });
   }, []);
+
   React.useEffect(() => {
     if (!token) return;
     handleTokenCheckMemo(token);
     userPromise(token);
-  }, [token]);*/
+  }, [token]);
 
-  /*function userPromise(token) {
+  function userPromise(token) {
     if (token) {
-      Promise.all([api.getUserInfo(token), api.getInitialCards(token)])
-        .then(([user, serverCards]) => {
+      Promise.all([api.getUserInfo(token), api.getAllExercises(token)])
+        .then(([user, exercises]) => {
           setCurrentUser(user.data);
-          getUserRole(user.data);
           setEmail(user.data.email);
-          setRoutine(serverCards.data);
+          setRoutine(exercises.data);
+        })
+        .then(() => {
+          if (currentUser.role === 'trainee') {
+            api
+              .getAllUsers(token)
+              .then((users) => {
+                const filtered = users.filter((u) => u.role !== 'trainer');
+                return filtered;
+              })
+              .then((filtered) => {
+                setTrainerList(filtered);
+              });
+          }
+          if (currentUser.role === 'trainer') {
+            api
+              .getAllUsers(token)
+              .then((users) => {
+                const filtered = users.filter((u) => u.role !== 'trainer');
+                return filtered;
+              })
+              .then((filtered) => {
+                setUserList(filtered);
+              });
+          }
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  }*/
-
-  ////card functions
+  }
 
   function handleTrainerSelect(trainer) {
-    trainer.trainees.push(currentUser);
-    currentUser.trainer.push(trainer);
-    setTimeout(() => {
+    api.setSelectedTrainer(trainer._id, token).then(() => {
       navigate('/exercises');
-    }, 100);
-
-    /*api
-      .changeTrainerSelectedStatus(currentUser._id, token)
-      .then(() => {
-        api.setSelectedTrainer(trainer._id, token);
-      })
-      .then(() => {
-        navigate('/exercises');
-      });*/
+    });
   }
 
   function handleExerciseCompletion(exercise, isCompleted) {
-    const userId = currentUser._id;
-
-    if (!isCompleted) {
-      exercise.completed.push(userId);
-      const update = routine.map((c) =>
-        c._id === exercise._id ? exercise : c
-      );
-      setRoutine(update);
-    } else {
-      exercise.completed.pop(userId);
-      const update = routine.map((c) =>
-        c._id === exercise._id ? exercise : c
-      );
-      setRoutine(update);
-    }
-    //setRoutine();
-    /*api
+    api
       .changeExerciseStatus(exercise._id, isCompleted, token)
       .then((newExercises) => {
         setRoutine((state) => {
@@ -179,37 +112,20 @@ export default function App() {
             c._id === exercise._id ? newExercises.data : c
           );
         });
-      });*/
+      });
   }
-  function handleAddExercise({ exercise, description, id }) {
-    const receiver = userList.find((person) => {
-      return person._id === id;
-    });
-    receiver.exercises.push({
-      exercise,
-      description,
-      _id: (()=>{useId()}),
-    });
-    const updatedList = userList.map((u) => (u._id === id ? receiver : u));
-    setUserList(updatedList);
-    /*api.postCard(user, name, description, token).then((newExercise) => {
-      setRoutine([newExercise.data, ...routine]);
-    });*/
+
+  function handleAddExercise({ exercise, description, owner }) {
+    api
+      .postExercise(owner, exercise, description, token)
+      .then((newExercise) => {
+        setRoutine([newExercise.data, ...routine]);
+      });
   }
 
   function handleEraseExercise(exercise, selectedUser) {
-    selectedUser.exercises = selectedUser.exercises.filter(
-      (exe) => exe._id !== exercise._id
-    );
-
-    const updatedList = userList.map((u) =>
-      u._id === selectedUser._id ? selectedUser : u
-    );
-    setUserList(updatedList);
-    closeAllPopups();
-
-    /*api
-      .deleteCard(exercise._id, token)
+    api
+      .deleteExercise(exercise._id, token)
       .then(
         setRoutine((state) => {
           const remainingExercises = state.filter(
@@ -218,9 +134,9 @@ export default function App() {
           return remainingExercises.map((c) => c);
         })
       )
-      .finally(closeAllPopups());*/
+      .finally(closeAllPopups());
   }
-  ////edition functions
+
   function handleEraseExerciseClick(card, id) {
     setDeletableCard(card);
     setUserIdExercise(id);
@@ -236,31 +152,29 @@ export default function App() {
     setIsTooltipOpen(false);
     setDeletableCard('');
     setUserIdExercise('');
+    setIsMenuOn(false);
   }
-  function routing(user) {
-    setTimeout(() => {
-      if (user === 'trainee') {
-        if (currentUser.trainer.length === 0) {
-          navigate('/trainers');
-        }
-        if (currentUser.trainer.length > 0) {
-          navigate('/exercises');
-        }
+  /*function routing(user) {
+    if (user === 'trainee') {
+      if (currentUser.trainer.length === 0) {
+        navigate('/trainers');
       }
-      if (user === 'trainer') {
-        navigate('/users');
+      if (currentUser.trainer.length > 0) {
+        navigate('/exercises');
       }
-    }, 100);
-  }
-  useEffect(() => {
+    }
+    if (user === 'trainer') {
+      navigate('/users');
+    }
+  }*/
+  /*useEffect(() => {
     const saveData = localStorage.getItem('jwt');
     if (saveData) {
       const user = JSON.parse(saveData);
       setCurrentUser(user);
     }
-  }, []);
-
-  useEffect(() => {
+  }, []);*/
+  /*useEffect(() => {
     if (!currentUser || !currentUser._id) {
       return;
     }
@@ -271,105 +185,33 @@ export default function App() {
     setEmail(currentUser.email);
     setLoggedIn(true);
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+  }, [currentUser]);*/
 
   ////registry
 
   function handleLoginSubmit({ email, password }) {
-    const loggedUser = dummyUser.find((person) => {
-      return person.email === email;
-    });
-    if (!loggedUser) {
-      alert('Usuario invalido');
-      setSuccess(false);
-      return;
-    }
-    checkPassword(loggedUser, password);
-
-    /*auth
+    auth
       .authorize(email, password)
       .then((data) => {
         setToken(data.token);
-        setUserRole(data.user.role);
         setCurrentUser(data.user);
-        setLoggedIn(true);
-        setEmail(data.user.email);
-        setUser
-        if (userRole === 'trainee') {
-          setIsTraineeee(true);
-      navigate('/');
-        }
-        if (userRole === 'trainer') {
-          setIsTrainer(true);
-      navigate('/users');
-        }
-        userPromise();
       })
       .catch((err) => {
         console.log(err);
-      });*/
+      });
   }
-  function checkPassword(loggedUser, password) {
-    if (loggedUser.password === password) {
-      setSuccess(true);
-      setCurrentUser(loggedUser);
-    } else {
-      setSuccess(false);
-      return;
-    }
-  }
+
   function handleLogout() {
     setLoggedIn(false);
+    setIsMenuOn(false);
     localStorage.removeItem('jwt');
     setEmail('');
     setCurrentUser('');
     navigate('/login');
   }
+
   function handleSignupSubmit({ name, lastname, email, password, role }) {
-    if (role === 'trainee') {
-      userList.push({
-        name,
-        lastname,
-        email,
-        password,
-        role,
-        _id: (()=>{useId()}),
-        exercises: [],
-        trainer: [],
-      });
-      dummyUser.push({
-        name,
-        lastname,
-        email,
-        password,
-        role,
-        _id: (()=>{useId()}),
-        exercises: [],
-        trainer: [],
-      });
-    }
-    if (role === 'trainer') {
-      trainerList.push({
-        name,
-        lastname,
-        email,
-        password,
-        role,
-        _id: (()=>{useId()}),
-        trainees: [],
-      });
-      dummyUser.push({
-        name,
-        lastname,
-        email,
-        password,
-        role,
-        _id: (()=>{useId()}),
-        trainees: [],
-      });
-    }
-    navigate('/login');
-    /*auth
+    auth
       .register(name, lastname, email, password, role)
       .then((res) => {
         navigate('/login');
@@ -382,7 +224,7 @@ export default function App() {
         setSuccess(false);
         setIsTooltipOpen(true);
         console.log(err);
-      });*/
+      });
   }
 
   ////events handlers
@@ -459,6 +301,7 @@ export default function App() {
                 element={
                   <TrainerUsers
                     userList={userList}
+                    routine={routine}
                     handleAddExercise={handleAddExercise}
                     handleEraseExerciseClick={handleEraseExerciseClick}
                     onDescriptionChange={handleDescriptionChange}

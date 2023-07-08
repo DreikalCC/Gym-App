@@ -21,7 +21,6 @@ export function UserExerciseCard(props) {
           className={exerciseCompletedButtonClassName}
           onClick={() => {
             props.handleExerciseCompletion(exercise, isCompleted);
-            /*isCompleted = !isCompleted;*/
           }}
         >
           {isCompleted ? 'completado' : 'completar'}

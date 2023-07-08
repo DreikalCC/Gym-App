@@ -5,6 +5,9 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export function Exercises(props) {
   const currentUserContext = useContext(CurrentUserContext);
+  const userRoutine = props.exercises.filter(
+    (exe) => exe.owner === currentUserContext._id
+  );
   return (
     <>
       <section className='profile'>
@@ -12,12 +15,6 @@ export function Exercises(props) {
           <h1 className='profile__name'>
             Your trainer is: {currentUserContext.trainer[0].name}
           </h1>
-          <button
-            id='profile-btn'
-            onClick={props.handleEditProfileClick}
-            className='profile__info profile__edit-button'
-          ></button>
-          <p className='profile__description'>{currentUserContext.about}</p>
         </div>
       </section>
 
@@ -25,7 +22,7 @@ export function Exercises(props) {
         {!props.exercises || !props.exercises.length ? (
           <Welcome />
         ) : (
-          props.exercises.map((exercise) => {
+          userRoutine.map((exercise) => {
             return (
               <UserExerciseCard
                 key={exercise._id}

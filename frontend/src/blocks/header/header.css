@@ -8,11 +8,12 @@
   overflow: hidden;
 }
 
-@media screen and (max-width:550px){
+@media screen and (max-width: 550px) {
   .header {
     grid-template-rows: 1fr 50px;
     height: min-content;
     padding-top: 28px;
-    width: 100%;
+    width: 90%;
+    margin: 0 auto;
   }
 }

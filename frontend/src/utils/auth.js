@@ -1,13 +1,13 @@
 export const BASE_URL = 'https://api.aldo.desarrollointerno.com';
 
-export const register = (name,lastname,email, password) => {
+export const register = (name, lastname, email, password, role) => {
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ name,lastname,email, password }),
+    body: JSON.stringify({ name, lastname, email, password, role }),
   })
     .then((res) => {
       return res.json();

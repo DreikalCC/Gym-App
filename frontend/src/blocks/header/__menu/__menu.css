@@ -8,11 +8,11 @@
   background-color: unset;
   display: none;
   cursor: pointer;
-  transition: all .1s linear;
+  transition: all 0.1s linear;
   border: none;
 }
 
-@media screen and (max-width:550px) {
+@media screen and (max-width: 550px) {
   .header__menu {
     grid-column-start: 2;
     grid-column-end: 3;

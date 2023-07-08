@@ -12,8 +12,19 @@ class Api {
       ${res.statusText}`);
   }
 
-  getInitialCards(token) {
-    return fetch(`${this.baseUrl}/cards`, {
+  getAllExercises(token) {
+    return fetch(`${this.baseUrl}/exercises`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(this._checkResponse)
+      .catch((err) => console.log(err));
+  }
+
+  getAllUsers(token) {
+    return fetch(`${this.baseUrl}/users`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
@@ -34,56 +45,26 @@ class Api {
       .catch((err) => console.log(err));
   }
 
-  postUserInfo(name, about, token) {
-    return fetch(`${this.baseUrl}/users/me`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        name: name,
-        about: about,
-      }),
-    })
-      .then(this._checkResponse)
-      .catch((err) => console.log(err));
-  }
-
-  postUserAvatar(link, token) {
-    return fetch(`${this.baseUrl}/users/me/avatar`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        avatar: link,
-      }),
-    })
-      .then(this._checkResponse)
-      .catch((err) => console.log(err));
-  }
-
-  postCard(name, link, token) {
-    return fetch(`${this.baseUrl}/cards`, {
+  postExercise(owner, exercise, description, token) {
+    return fetch(`${this.baseUrl}/exercises`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        name,
-        link,
+        exercise,
+        description,
+        owner,
       }),
     })
       .then(this._checkResponse)
       .catch((err) => console.log(err));
   }
 
-  changeLikeCardStatus(cardId, isLiked, token) {
-    if (isLiked) {
-      return fetch(`${this.baseUrl}/cards/${cardId}/likes`, {
+  changeExerciseStatus(cardId, iscompleted, token) {
+    if (iscompleted) {
+      return fetch(`${this.baseUrl}/exercises/${cardId}/completed`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -93,7 +74,7 @@ class Api {
         .then((res) => this._checkResponse(res))
         .catch((err) => console.log(err));
     } else {
-      return fetch(`${this.baseUrl}/cards/${cardId}/likes`, {
+      return fetch(`${this.baseUrl}/exercises/${cardId}/completed`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -105,8 +86,8 @@ class Api {
     }
   }
 
-  deleteCard(cardId, token) {
-    return fetch(`${this.baseUrl}/cards/${cardId}`, {
+  deleteExercise(cardId, token) {
+    return fetch(`${this.baseUrl}/exercises/${cardId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -117,8 +98,37 @@ class Api {
       .then(this._checkResponse)
       .catch((err) => console.log(err));
   }
-}
 
+  setSelectedTrainer(trainer, token) {
+    return fetch(`${this.baseUrl}/user/me/trainer`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        trainer,
+      }),
+    })
+      .then((res) => this._checkResponse(res))
+      .catch((err) => console.log(err));
+  }
+
+  setTrainee(userId, cardId, token) {
+    return fetch(`${this.baseUrl}/user/${cardId}/trainees`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        trainee: userId,
+      }),
+    })
+      .then((res) => this._checkResponse(res))
+      .catch((err) => console.log(err));
+  }
+}
 const api = new Api({
   address: 'https://api.aldo.desarrollointerno.com',
   token: '04346056-dea4-4d40-8541-43203e80bf1',
