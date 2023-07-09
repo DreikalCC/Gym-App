@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://api.aldo.desarrollointerno.com';
+export const BASE_URL = 'https://api.boukenshagym.boukensha.site';
 
 export const register = (name, lastname, email, password, role) => {
   return fetch(`${BASE_URL}/signup`, {
