@@ -11,7 +11,9 @@ export function TraineeCard({
   onSubmit,
 }) {
   const user = data;
-  const userRoutine = routine.filter((exe) => exe.owner === user._id);
+  console.log('usuario que se le pone ejercicio', user);
+  const userRoutine = routine.filter((e) => e.owner[0] === user._id);
+  console.log('rutina recibida', userRoutine);
 
   return (
     <div className='element'>

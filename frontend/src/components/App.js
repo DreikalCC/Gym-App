@@ -57,6 +57,7 @@ export default function App() {
     if (!token) return;
     handleTokenCheckMemo(token);
     userPromise(token);
+    console.log('token', token);
   }, [token]);
 
   function userPromise(token) {
@@ -83,9 +84,14 @@ export default function App() {
 
   function handleTrainerSelect(trainer) {
     console.log('trainer selected', trainer);
-    api.setSelectedTrainer(currentUser._id, trainer._id, token).then(() => {
-      navigate('/exercises');
-    });
+    api
+      .setSelectedTrainer(trainer._id, token)
+      .then(() => {
+        userPromise(token);
+      })
+      .then(() => {
+        navigate('/exercises');
+      });
   }
 
   function handleExerciseCompletion(exercise, isCompleted) {
@@ -100,12 +106,13 @@ export default function App() {
       });
   }
 
-  function handleAddExercise({ exercise, description, owner }) {
-    api
-      .postExercise(owner, exercise, description, token)
-      .then((newExercise) => {
-        setRoutine([newExercise.data, ...routine]);
-      });
+  function handleAddExercise({ exercise, description, id }) {
+    console.log('ejercicio enviado', exercise);
+    console.log('ejercicio enviado', description);
+    console.log('ejercicio enviado', id);
+    api.postExercise(id, exercise, description, token).then(() => {
+      userPromise(token);
+    });
   }
 
   function handleEraseExercise(exercise, selectedUser) {
@@ -149,6 +156,9 @@ export default function App() {
       .then((data) => {
         setToken(data.token);
         setCurrentUser(data.user);
+      })
+      .then(() => {
+        navigate('/');
       })
       .catch((err) => {
         console.log(err);
