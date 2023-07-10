@@ -100,7 +100,9 @@ class Api {
   }
 
   setSelectedTrainer(trainer, token) {
-    return fetch(`${this.baseUrl}/user/me/trainer`, {
+    console.log('trainer ', trainer);
+    console.log('token', token);
+    return fetch(`${this.baseUrl}/users/me/trainer`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -115,7 +117,10 @@ class Api {
   }
 
   setTrainee(userId, cardId, token) {
-    return fetch(`${this.baseUrl}/user/${cardId}/trainees`, {
+    console.log('trainer ', cardId);
+    console.log('token', token);
+    console.log('trainee ', userId);
+    return fetch(`${this.baseUrl}/users/${cardId}/trainees`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -123,6 +128,7 @@ class Api {
       },
       body: JSON.stringify({
         trainee: userId,
+        trainer: cardId,
       }),
     })
       .then((res) => this._checkResponse(res))

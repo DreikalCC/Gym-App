@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
@@ -61,35 +61,19 @@ export default function App() {
 
   function userPromise(token) {
     if (token) {
-      Promise.all([api.getUserInfo(token), api.getAllExercises(token)])
-        .then(([user, exercises]) => {
+      Promise.all([
+        api.getUserInfo(token),
+        api.getAllUsers(token),
+        api.getAllExercises(token),
+      ])
+        .then(([user, everyone, exercises]) => {
           setCurrentUser(user.data);
           setEmail(user.data.email);
           setRoutine(exercises.data);
-        })
-        .then(() => {
-          if (currentUser.role === 'trainee') {
-            api
-              .getAllUsers(token)
-              .then((users) => {
-                const filtered = users.filter((u) => u.role !== 'trainer');
-                return filtered;
-              })
-              .then((filtered) => {
-                setTrainerList(filtered);
-              });
-          }
-          if (currentUser.role === 'trainer') {
-            api
-              .getAllUsers(token)
-              .then((users) => {
-                const filtered = users.filter((u) => u.role !== 'trainer');
-                return filtered;
-              })
-              .then((filtered) => {
-                setUserList(filtered);
-              });
-          }
+          const theTrainers = everyone.data.filter((u) => u.role !== 'trainee');
+          setTrainerList(theTrainers);
+          const theUsers = everyone.data.filter((u) => u.role !== 'trainer');
+          setUserList(theUsers);
         })
         .catch((err) => {
           console.log(err);
@@ -98,7 +82,8 @@ export default function App() {
   }
 
   function handleTrainerSelect(trainer) {
-    api.setSelectedTrainer(trainer._id, token).then(() => {
+    console.log('trainer selected', trainer);
+    api.setSelectedTrainer(currentUser._id, trainer._id, token).then(() => {
       navigate('/exercises');
     });
   }
@@ -147,6 +132,7 @@ export default function App() {
   function handleMenuClick() {
     setIsMenuOn(true);
   }
+
   function closeAllPopups() {
     setEraseCardPopupOpen(false);
     setIsTooltipOpen(false);
@@ -154,38 +140,6 @@ export default function App() {
     setUserIdExercise('');
     setIsMenuOn(false);
   }
-  /*function routing(user) {
-    if (user === 'trainee') {
-      if (currentUser.trainer.length === 0) {
-        navigate('/trainers');
-      }
-      if (currentUser.trainer.length > 0) {
-        navigate('/exercises');
-      }
-    }
-    if (user === 'trainer') {
-      navigate('/users');
-    }
-  }*/
-  /*useEffect(() => {
-    const saveData = localStorage.getItem('jwt');
-    if (saveData) {
-      const user = JSON.parse(saveData);
-      setCurrentUser(user);
-    }
-  }, []);*/
-  /*useEffect(() => {
-    if (!currentUser || !currentUser._id) {
-      return;
-    }
-    localStorage.setItem('jwt', JSON.stringify(currentUser));
-    routing(currentUser.role);
-
-    setRoutine(currentUser.exercises);
-    setEmail(currentUser.email);
-    setLoggedIn(true);
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);*/
 
   ////registry
 

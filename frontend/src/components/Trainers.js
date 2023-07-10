@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { TrainerSelect } from './TrainerSelect';
 import { Welcome } from './Welcome';
 //import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export function Trainers(props) {
+  console.log('log de trainers', props);
   //const currentUserContext = useContext(CurrentUserContext);
   return (
     <>
