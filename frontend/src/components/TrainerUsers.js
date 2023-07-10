@@ -4,7 +4,12 @@ import { Welcome } from './Welcome';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export function TrainerUsers(props) {
+  console.log('props para el trainer', props);
   const currentUserContext = useContext(CurrentUserContext);
+  const trainees = props.userList;
+  const ownTrainee = trainees.filter(
+    (t) => t.trainer === currentUserContext._id
+  );
   function handleSubmit(e) {
     e.preventDefault();
     props.handleAddExercise({
@@ -25,7 +30,7 @@ export function TrainerUsers(props) {
         {!props.userList || !props.userList.length ? (
           <Welcome />
         ) : (
-          props.userList.map((user) => {
+          ownTrainee.map((user) => {
             return (
               <TraineeCard
                 key={user._id}

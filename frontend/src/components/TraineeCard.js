@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import React from 'react';
+//import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { TrainerExerciseCard } from './TrainerExerciseCard';
 
 export function TraineeCard({
@@ -12,12 +12,9 @@ export function TraineeCard({
 }) {
   const user = data;
   const userRoutine = routine.filter((exe) => exe.owner === user._id);
-  const currentUser = useContext(CurrentUserContext);
-  const isOwnTrainee = user.trainer[0]._id === currentUser._id;
-  const userClassName = `${isOwnTrainee ? 'element' : 'element_disabled'}`;
 
   return (
-    <div className={userClassName}>
+    <div className='element'>
       <div className='element__group_user'>
         <h3 className='element__location'>{user.name}</h3>
         {userRoutine.map((exercise) => {
