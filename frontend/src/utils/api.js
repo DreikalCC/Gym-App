@@ -101,7 +101,7 @@ class Api {
 
   setSelectedTrainer(trainer, token) {
     console.log('trainer ', trainer);
-    console.log('token', token);
+    console.log('token api', token);
     return fetch(`${this.baseUrl}/users/me/trainer`, {
       method: 'PUT',
       headers: {
