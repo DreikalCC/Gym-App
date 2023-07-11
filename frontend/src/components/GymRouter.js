@@ -12,8 +12,6 @@ export function GymRouter() {
     element = <Navigate to='/trainers' />;
   } else if (currentUserContext.trainer.length > 0) {
     element = <Navigate to='/exercises' />;
-  } else {
-    element = <Navigate to='login' />;
   }
   return element;
 }
