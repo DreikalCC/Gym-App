@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
-import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
+import api from '../utils/api';
+import * as auth from '../utils/auth';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { Exercises } from './Exercises';
 import { TrainerUsers } from './TrainerUsers';
-import api from '../utils/api';
-import * as auth from '../utils/auth';
+import { GymRouter } from './GymRouter';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { DeleteCardPopup } from './DeleteCardPopup';
 import { ProtectedRoute } from './ProtectedRoute';
@@ -51,13 +52,14 @@ export default function App() {
         navigate('/');
       }
     });
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {
     if (!token) return;
     handleTokenCheckMemo(token);
     userPromise(token);
-    console.log('token', token);
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   function userPromise(token) {
@@ -83,7 +85,6 @@ export default function App() {
   }
 
   function handleTrainerSelect(trainer) {
-    console.log('trainer selected', trainer);
     api
       .setSelectedTrainer(trainer._id, token)
       .then(() => {
@@ -107,9 +108,6 @@ export default function App() {
   }
 
   function handleAddExercise({ exercise, description, id }) {
-    console.log('ejercicio enviado', exercise);
-    console.log('ejercicio enviado', description);
-    console.log('ejercicio enviado', id);
     api.postExercise(id, exercise, description, token).then(() => {
       userPromise(token);
     });
@@ -251,6 +249,7 @@ export default function App() {
                 element={
                   <Exercises
                     exercises={routine}
+                    trainers={trainerList}
                     handleExerciseCompletion={handleExerciseCompletion}
                   />
                 }
@@ -300,13 +299,14 @@ export default function App() {
           />
           <Route
             path='/'
-            element={
+            /*element={
               loggedIn && currentUser.role === 'trainer' ? (
                 <Navigate to='/users' />
               ) : (
                 <Navigate to='/trainers' />
               )
-            }
+            }*/
+            element={loggedIn && <GymRouter />}
           />
         </Routes>
         <InfoTooltip
