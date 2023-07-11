@@ -8,7 +8,7 @@ export function Register(props) {
       name: props.name,
       lastname: props.lastname,
       email: props.email,
-      password: props.password,
+      password: e.target.password.value,
       role: e.target.role.value,
     });
   }
