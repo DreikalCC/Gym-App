@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import api from '../utils/api';
 import * as auth from '../utils/auth';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { Exercises } from './Exercises';
@@ -208,7 +208,7 @@ export default function App() {
   function handlePasswordChange(e) {
     setPassword(e.target.value);
   }
-
+  console.log('logged?????', loggedIn);
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
@@ -276,6 +276,7 @@ export default function App() {
               />
             }
           />
+
           <Route
             path='/login'
             element={<Login onLoginSubmit={handleLoginSubmit} />}
@@ -299,16 +300,10 @@ export default function App() {
           />
           <Route
             path='/'
-            /*element={
-              loggedIn && currentUser.role === 'trainer' ? (
-                <Navigate to='/users' />
-              ) : (
-                <Navigate to='/trainers' />
-              )
-            }*/
-            element={loggedIn && <GymRouter />}
+            element={loggedIn ? <GymRouter /> : <Navigate to='/login' />}
           />
         </Routes>
+
         <InfoTooltip
           isTooltipOpen={isTooltipOpen}
           onClose={closeAllPopups}
