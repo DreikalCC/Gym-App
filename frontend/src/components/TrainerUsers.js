@@ -4,10 +4,8 @@ import { Welcome } from './Welcome';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export function TrainerUsers(props) {
-  console.log('props para el trainer', props);
   const currentUserContext = useContext(CurrentUserContext);
   const trainees = props.userList;
-  console.log('lista de trainees', trainees);
   const ownTrainee = trainees.filter(
     (t) => t.trainer[0] === currentUserContext._id
   );

@@ -15,7 +15,7 @@ export function UserExerciseCard(props) {
   return (
     <div className={exerciseCompletedClassName}>
       <div className='element__group element__group_user'>
-        <h3 className='element__location'>{exercise.name}</h3>
+        <h3 className='element__location'>{exercise.exercise}</h3>
         <p className='element__description'>{exercise.description}</p>
         <button
           className={exerciseCompletedButtonClassName}

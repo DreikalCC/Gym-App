@@ -4,7 +4,6 @@ import { Welcome } from './Welcome';
 //import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export function Trainers(props) {
-  console.log('log de trainers', props);
   //const currentUserContext = useContext(CurrentUserContext);
   return (
     <>

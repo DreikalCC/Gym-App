@@ -100,8 +100,6 @@ class Api {
   }
 
   setSelectedTrainer(trainer, token) {
-    console.log('trainer ', trainer);
-    console.log('token api', token);
     return fetch(`${this.baseUrl}/users/me/trainer`, {
       method: 'PUT',
       headers: {
@@ -117,9 +115,6 @@ class Api {
   }
 
   setTrainee(userId, cardId, token) {
-    console.log('trainer ', cardId);
-    console.log('token', token);
-    console.log('trainee ', userId);
     return fetch(`${this.baseUrl}/users/${cardId}/trainees`, {
       method: 'PUT',
       headers: {
