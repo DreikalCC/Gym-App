@@ -32,7 +32,6 @@ export default function App() {
   const [email, setEmail] = React.useState('');
   const [lastname, setLastname] = React.useState('');
   const [name, setName] = React.useState('');
-  const [password, setPassword] = React.useState('');
   const [exercise, setExercise] = React.useState('');
 
   //information
@@ -49,7 +48,6 @@ export default function App() {
     auth.checkToken(token).then((res) => {
       if (res.status === true) {
         setLoggedIn(true);
-        navigate('/');
       }
     });
     //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,8 +55,9 @@ export default function App() {
 
   React.useEffect(() => {
     if (!token) return;
-    handleTokenCheckMemo(token);
     userPromise(token);
+    handleTokenCheckMemo(token);
+    navigate('/');
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
@@ -80,7 +79,8 @@ export default function App() {
         })
         .catch((err) => {
           console.log(err);
-        });
+        })
+        .finally(navigate('/'));
     }
   }
 
@@ -175,7 +175,7 @@ export default function App() {
   function handleSignupSubmit({ name, lastname, email, password, role }) {
     auth
       .register(name, lastname, email, password, role)
-      .then((res) => {
+      .then(() => {
         navigate('/login');
       })
       .then(() => {
@@ -205,10 +205,7 @@ export default function App() {
   function handleEmailChange(e) {
     setEmail(e.target.value);
   }
-  function handlePasswordChange(e) {
-    setPassword(e.target.value);
-  }
-  console.log('logged?????', loggedIn);
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
@@ -289,19 +286,14 @@ export default function App() {
                 onNameChange={handleNameChange}
                 onLastnameChange={handleLastnameChange}
                 onEmailChange={handleEmailChange}
-                onPasswordChange={handlePasswordChange}
                 onSignupSubmit={handleSignupSubmit}
                 name={name}
                 lastname={lastname}
                 email={email}
-                password={password}
               />
             }
           />
-          <Route
-            path='/'
-            element={loggedIn ? <GymRouter /> : <Navigate to='/login' />}
-          />
+          <Route path='/' element={loggedIn && <GymRouter />} />
         </Routes>
 
         <InfoTooltip
