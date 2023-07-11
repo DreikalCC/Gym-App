@@ -278,7 +278,6 @@ export default function App() {
             path='/login'
             element={<Login onLoginSubmit={handleLoginSubmit} />}
           />
-
           <Route
             path='/signup'
             element={
