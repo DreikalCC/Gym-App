@@ -16,6 +16,10 @@ al igual que el boton para completar el ejercicio cambiara su texto y su color, 
 
 'npm run start'
 
+# O se puede visitar la pagina:
+
+https://boukenshagym.boukensha.site
+
 ## los usuarios que se encuentran registrados para pruebas son los siguientes:
 
 Trainer 1 email: test@test.com password: 123456
