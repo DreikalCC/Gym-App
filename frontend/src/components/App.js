@@ -56,7 +56,10 @@ export default function App() {
     if (!token) return;
     userPromise(token);
     handleTokenCheckMemo(token);
-    navigate('/');
+    setTimeout(() => {
+      navigate('/');
+    }, 500);
+
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
