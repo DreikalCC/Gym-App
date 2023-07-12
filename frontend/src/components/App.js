@@ -17,7 +17,6 @@ import { Trainers } from './Trainers';
 
 export default function App() {
   const navigate = useNavigate();
-  React.useState(false);
 
   //tools
   const [isEraseCardPopupOpen, setEraseCardPopupOpen] = React.useState(false);
@@ -292,7 +291,10 @@ export default function App() {
               />
             }
           />
-          <Route path='/' element={loggedIn && <GymRouter />} />
+          <Route
+            path='/'
+            element={loggedIn ? <GymRouter /> : <Navigate to='/login' />}
+          />
         </Routes>
 
         <InfoTooltip
